@@ -1,0 +1,292 @@
+tribe_id,tribe_name
+1,Abnaki
+2,Acoma
+3,Alabama
+4,Alaska Native
+5,Aleut
+6,Algonquin
+7,"Algonquin, Quebec"
+8,"Algonquin, Tete-de-Boule"
+9,Anticosti
+10,Apache
+11,"Apache, Chiricahua & Mescalero"
+12,"Apache, Mescalero"
+13,"Apache, San Carlos"
+14,"Apache, Western"
+15,"Apache, White Mountain"
+16,Apalachee
+17,Arapaho
+18,Arikara
+19,Atsugewi
+20,Bannock
+21,Bella Coola
+22,Bellabella
+23,Blackfoot
+24,Cahuilla
+25,California Indian
+26,Canadian Indian
+27,Carrier
+28,"Carrier, Northern"
+29,"Carrier, Southern"
+30,Catawba
+31,Chehalis
+32,Cherokee
+33,Cheyenne
+34,"Cheyenne, Northern"
+35,Chickasaw
+36,Chinook
+37,"Chinook, Lower"
+38,Chippewa
+39,Choctaw
+40,Chumash
+41,Clallam
+42,Coahuilla
+43,Cochiti
+44,Cocopa
+45,Cocopa and Yuma
+46,"Cocopa, Maricopa, Mohave & Yuma"
+47,Coeur d'Alene
+48,Comanche
+49,Concow
+50,Costanoan
+51,Costanoan (Olhonean)
+52,Cowichan
+53,Cowlitz
+54,Cree
+55,"Cree, Alberta"
+56,"Cree, Hudson Bay"
+57,"Cree, Plains"
+58,"Cree, Woodlands"
+59,Creek
+60,Crow
+61,Dakota
+62,Delaware
+63,"Delaware, Oklahoma"
+64,"Delaware, Ontario"
+65,Diegueno
+66,Eskimo
+67,"Eskimo, Alaska"
+68,"Eskimo, Arctic"
+69,"Eskimo, Chugach"
+70,"Eskimo, Greenland"
+71,"Eskimo, Inuktitut"
+72,"Eskimo, Inupiat"
+73,"Eskimo, Kuskokwagmiut"
+74,"Eskimo, Nunivak"
+75,"Eskimo, Western"
+76,Flathead
+77,Gabrielino
+78,Gitksan
+79,Gosiute
+80,Great Basin Indian
+81,Green River Group
+82,Gros Ventre
+83,Hahwunkwut
+84,Haida
+85,Haihais
+86,Haisla
+87,Haisla and Hanaksiala
+88,Hanaksiala
+89,Havasupai
+90,Hawaiian
+91,Heiltzuk
+92,Hesquiat
+93,Hidatsa
+94,Hoh
+95,Hopi
+96,Houma
+97,Hualapai
+98,Hupa
+99,Huron
+100,Iroquois
+101,Isleta
+102,Jemez
+103,Kamia
+104,Kansa
+105,Karok
+106,Kawaiisu
+107,"Keres, Western"
+108,Keresan
+109,Kiliwa
+110,Kimsquit
+111,Kiowa
+112,Kitasoo
+113,Kitkatla
+114,Klallam
+115,Klamath
+116,Koasati
+117,Konomeho
+118,Koyukon
+119,Kuper Island Indian
+120,Kutenai
+121,Kwakiutl
+122,"Kwakiutl, Southern"
+123,Kwakwaka'wakw
+124,Laguna
+125,Lakota
+126,Lillooet
+127,Lolahnkok
+128,Luiseno
+129,Lummi
+130,"Lummi, Washington"
+131,Mahuna
+132,Maidu
+133,Makah
+134,Malecite
+135,Mandan
+136,Maricopa
+137,Mendocino Indian
+138,Menominee
+139,Meskwaki
+140,Mewuk
+141,Micmac
+142,Midoo
+143,Missouri River Indian
+144,Miwok
+145,Modesse
+146,Modoc
+147,Mohave
+148,Mohave and Maricopa
+149,Mohegan
+150,Montagnais
+151,Montana Indian
+152,Montauk
+153,Nanaimo
+154,Nanticoke
+155,Narraganset
+156,Natchez
+157,Navajo
+158,"Navajo, Kayenta"
+159,"Navajo, Ramah"
+160,Neeshenam
+161,Nevada Indian
+162,Nez Perce
+163,Nimpkish
+164,Nisga
+165,Nisqually
+166,Nitinaht
+167,Nootka
+168,"Nootka, Manhousat"
+169,Northwest Indian
+170,Numlaki
+171,Nuxalkmc
+172,Oglala
+173,Ojibwa
+174,"Ojibwa, South"
+175,Okanagan-Colville
+176,Okanagon
+177,Omaha
+178,Oregon Indian
+179,"Oregon Indian, Warm Springs"
+180,Oto
+181,Oweekeno
+182,Paipai
+183,Paiute
+184,"Paiute, Nevada"
+185,"Paiute, Northern"
+186,"Paiute, Southern"
+187,Panamint
+188,Papago
+189,Papago and Pima
+190,Pawnee
+191,"Pend d'Oreille, Upper"
+192,Penobscot
+193,Pima
+194,"Pima, Desert"
+195,"Pima, Gila River"
+196,"Pima, Lehi"
+197,Pit River
+198,Plains Indian
+199,Poliklah
+200,Pomo
+201,"Pomo, Calpella"
+202,"Pomo, Kashaya"
+203,"Pomo, Little Lakes"
+204,"Pomo, Potter Valley"
+205,Ponca
+206,Potawatomi
+207,Pueblo
+208,Puyallup
+209,Quileute
+210,Quinault
+211,Rappahannock
+212,Ree
+213,Rocky Boy
+214,Round Valley Indian
+215,Saanich
+216,Salish
+217,"Salish, Coast"
+218,"Salish, Cowichan"
+219,"Salish, Halkomelem"
+220,"Salish, Straits"
+221,Samish
+222,San Felipe
+223,San Ildefonso
+224,Sanel
+225,Sanpoil
+226,Sanpoil and Nespelem
+227,Santa Clara
+228,Seminole
+229,Seri
+230,Shasta
+231,Shinnecock
+232,Shoshoni
+233,Shuswap
+234,Sia
+235,Sierra
+236,Sikani
+237,Similkameen
+238,Sioux
+239,"Sioux, Fort Peck"
+240,"Sioux, Teton"
+241,Skagit
+242,"Skagit, Upper"
+243,Skokomish
+244,Snake
+245,Snohomish
+246,Snuqualmie
+247,Songish
+248,Southwest Indians
+249,Spanish American
+250,Spokan
+251,Squaxin
+252,Stony Indian
+253,Swinomish
+254,Tanaina
+255,"Tanana, Upper"
+256,Tarahumara
+257,Tewa
+258,Tewa of Hano
+259,Thompson
+260,"Thompson, Lower"
+261,"Thompson, Upper (Fraser Band)"
+262,"Thompson, Upper (Lytton Band)"
+263,"Thompson, Upper (Nicola Band)"
+264,"Thompson, Upper (Spences Bridge)"
+265,Tlingit
+266,Tolowa
+267,Tsimshian
+268,"Tsimshian, Coast"
+269,Tubatulabal
+270,Ukiah
+271,Umatilla
+272,Ute
+273,Wailaki
+274,Walapai
+275,Warihio
+276,Washo
+277,West Coast Indian
+278,Wet'suwet'en
+279,Weyot
+280,Winnebago
+281,Wintoon
+282,Yana
+283,Yaqui
+284,Yavapai
+285,Yokia
+286,Yokut
+287,Yuki
+288,Yuma
+289,Yurok
+290,"Yurok, South Coast (Nererner)"
+291,Zuni

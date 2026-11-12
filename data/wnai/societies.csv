@@ -1,0 +1,173 @@
+ID,Name,Latitude,Longitude,Glottocode,Name_and_ID_in_source,xd_id,alt_names_by_society,main_focal_year,HRAF_name_ID,HRAF_ID,origLat,origLong,comment,glottocode_comment,region
+WNAI1,North Tlingit,59,-136,tlin1245,North Tlingit (J1),xd1431,North Tlinkit,,Tlingit (NA12),NA12,59,136,Original,"Note northern and southern tlingit considered distinct dialects of tli by some, but no codes available in Glottolog.",Subarctic America
+WNAI2,South Tlingit,57,-133.59,tlin1245,South Tlingit (J2),xd1082,Kolosh; Southern Tlingit; South Tlingit,,Tlingit (NA12),NA12,57,134,Revised,"Preferred name updated 9May2019 to distinguish from North Tlingit. Note northern and southern tlingit considered distinct dialects of tli by some, but no codes available in Glottolog.",Subarctic America
+WNAI3,Haida (Northern),54,-132,nort2938,North Masset Haida (J3),xd1068,North Masset Haida,,,,54,132,Original,,Western Canada
+WNAI4,Haida (Southern),53.09,-132.1,sout2956,South Skidegate Haida (J4),xd1438,South Skidegate Haida,,Haida (NE09),NE09,53,133,Revised,,Western Canada
+WNAI5,Tsimshian,55.3,-130.05,nucl1649,Tsimshian (J5),xd1104,Ts’msyan,,,,55.3,130,Revised,,Subarctic America
+WNAI6,Gitxsan,56.3,-127.5,gitx1241,Gitksan Tsimshian (J6),xd998,Gitksan; Gitksan Tsimshian,,,,56.3,127.5,Original,,Western Canada
+WNAI7,Haisla,53.5,-128,hais1244,Haisla Kwakiutl (J7),xd1105,Kitimat; Haisla Kwakiutl,,,,53.5,128,Original,,Western Canada
+WNAI8,Haihais,53,-128.5,oowe1239,Haihais Kwakiutl (J8),xd1424,Haihais; XaiXais,,,,53,128.5,Original,,Western Canada
+WNAI9,Heiltsuk,52,-128,bell1263,Bella Bella Kwakiutl (J9),xd1083,Bellabella; Bella Bella; Bella Bella Kwakiutl,,,,52,128,Original,,Western Canada
+WNAI10,Kwakwaka'wakw,50.86,-127,kwak1269,Fort Rupert Kwakiutl (J10),xd1090,Southern Kwakiutl; Kwagu'?; Kwagyewlth; Fort Rupert Kwakiutl,,,,50.8,127,Revised,,Western Canada
+WNAI11,Nuxalk,52.5,-127.5,bell1243,Bella Coola Salish (J11),xd1106,Nuxalkmc; Bellacoola; Bilqula; Bella Coola; Bella Coola Salish,,Nuxalk (NE06),NE06,52.5,127.5,Original,,Western Canada
+WNAI12,Nuu chah nulth,49.16,-125.85,nuuc1236,Clayoquot Nootka (J12),xd1070,Nuu-chah-nulth; Aht; Central Nootka; Clayoquot Nootka,,Nuu-chah-nulth (NE11),NE11,49,126,Revised,,Western Canada
+WNAI13,Makah,48.33,-124.62,maka1318,Makah Nootkan (J13),xd1084,Makah Nootkan,,Nootka (NE11),NE11,48.5,124.7,Revised,,Northwestern U.S.A.
+WNAI14,Klahoose,50.5,-124.5,slia1241,Klahuse Salish (J14),xd1071,Klahoose; Klahuse,,,,50.5,124.5,Original,,Western Canada
+WNAI15,Pentlatch,49.5,-125,pent1242,Pentlatch Salish (J15),xd1427,Pentlatch Salish,,,,49.5,125,Original,,Western Canada
+WNAI16,Squamish,49.7,-123.3,squa1248,Squamish Salish (J16),xd1072,Squamish Salish,,,,49.7,123.3,Original,,Western Canada
+WNAI17,Cowichan,48.7,-123.7,cowi1241,Cowichan Salish (J17),xd1086,Hul'q'umi'num Mustimuhw; Cowichan Salish,,,,48.7,123.7,Original,,Western Canada
+WNAI18,West Saanich,48.4,-123.5,saan1246,West Sanetch Salish (J18),xd1428,West Sanetch Salish,,,,48.4,123.5,Original,"Note 8Feb2018: Glottocode updated from saan1244 to saan1246; Previously saan1244, updated to  saan1246 by @kirbykat 27 April 2017",Western Canada
+WNAI19,Stó:lō,49.4,-121.5,chil1281,Upper Stalo Salish (J19),xd1087,Stalo; Halkomelem; Fraser River Cowichan; Upper Stalo Salish,,,,49.4,121.5,Original,,Western Canada
+WNAI20,Musqueam,49.37,-123.24,musq1240,Lower Fraser Salish (J20),xd1441,Lower Fraser Salish,,,,49.3,123.3,Revised,,Western Canada
+WNAI21,Lummi,48.7,-123.7,lumm1243,Lummi Salish (J21),xd1074,Lhaq'temish; Lummi Salish,,,,48.7,123.7,Original,,Western Canada
+WNAI22,Klallam,47.95,-123.55,clal1241,Klallam Salish (J22),xd1075,Clallum; Klallam Salish,,,,48.2,123.2,Revised,,Northwestern U.S.A.
+WNAI23,Twana,47.3,-123,twan1247,Twana Salish (J23),xd1079,Twana Salish,,,,47.3,123,Original,,Northwestern U.S.A.
+WNAI24,Quinault,47.4,-124.1,quin1251,Quinault Salish (J24),xd1085,Quinault Salish,,Quinault (NR17),NR17,47.4,124.1,Original,,Northwestern U.S.A.
+WNAI25,Puyallup,47.1,-122.5,sout2965,Puyallup Salish (J25),xd1076,Puyallup Salish,,,,47.1,122.5,Original,,Northwestern U.S.A.
+WNAI26,Quileute,47.9,-124.3,quil1240,Quileute Chimakuan (J26),xd1077,Quileute Chimakuan,,,,47.9,124.3,Original,,Northwestern U.S.A.
+WNAI27,Lower Chinook,46.35,-124,chin1286,Lower Chinook (J27),xd1078,Chinook,,Chinookans of the Lower Columbia River (NR06),NR06,46.4,124,Revised,,Northwestern U.S.A.
+WNAI28,Tillamook,45.4,-123.82,till1254,Tillamook Salish (J28),xd1080,Nehalem; Tillamook Salish,,,,45.5,123.9,Revised,,Northwestern U.S.A.
+WNAI29,Alsea,44.7,-124,alse1251,Alsea (J29),xd1088,,,,,44.7,124,Original,,Northwestern U.S.A.
+WNAI30,Siuslaw,44,-124,sius1254,Siuslaw (J30),xd1089,,,,,44,124,Original,,Northwestern U.S.A.
+WNAI31,Coos,43.3,-124.2,coos1249,Coos (J31),xd1081,,,,,43.3,124.2,Original,,Northwestern U.S.A.
+WNAI32,Tututni,42.5,-124.3,tutu1242,Tututni Athapaskan (J32),xd1092,Tututni Athapaskan,,,,42.5,124.3,Original,,Northwestern U.S.A.
+WNAI33,Chetco,42.1,-124.2,tolo1259,Chetco Athapaskan (J33),xd1422,Chetco Athapaskan,,,,42.1,124.2,Original,"Note 8Feb2018: KK: changed back to tolo1259, as chet1237 was a bookkeeping language.",Northwestern U.S.A.
+WNAI34,Taltushtuntede,42.5,-123.5,gali1261,Galice Creek Athapaskan (J34),xd1423,Taltushtuntude; Galice Creek or Tal-tuc-tun-te-de,,,,42.5,123.5,Original,,Northwestern U.S.A.
+WNAI35,Tolowa,41.87,-123.92,tolo1259,Tolowa Athapaskan (J35),xd1103,Tolowa Athapaskan,,,,41.7,124.2,Revised,,Southwestern U.S.A.
+WNAI36,Yurok,41.5,-124,yuro1248,Yurok (J36),xd1101,,,Yurok (NS31),NS31,41.5,124,Original,,Southwestern U.S.A.
+WNAI37,Karuk,41.4,-123.5,karo1304,Karok (J37),xd1095,Karok,,,,41.4,123.5,Original,,Southwestern U.S.A.
+WNAI38,Hupa,41,-123.5,hupa1239,Hupa Athapaskan (J38),xd1096,Hupa Athapaskan,,,,41,123.5,Original,,Southwestern U.S.A.
+WNAI39,Wiyot,40.8,-124,wiyo1248,Wiyot (J39),xd1097,,,,,40.8,124,Original,,Southwestern U.S.A.
+WNAI40,Sinkyone,40.2,-123.8,wail1244,Sinkyone Athapaskan (J40),xd1100,Sinkyone Athapaskan,,,,40.2,123.8,Original,"Note, Nongatl, Sinkyone and Lassik considered distinct dialects of wlk by some, but glottolog does not provide dialect identifiers",Southwestern U.S.A.
+WNAI41,Mattole-Bear River,40.4,-124.1,matt1238,Mattole Athapaskan (J41),xd1099,Mattole; Bear River,,,,40.4,124.1,Original,,Southwestern U.S.A.
+WNAI42,Nongatl,40.4,-123.6,wail1244,Nongatl Athapaskan (J42),xd1434,Nongatl Athapaskan,,,,40.4,123.6,Original,"Note, Nongatl, Sinkyone and Lassik considered distinct dialects of wlk by some, but glottolog does not provide dialect identifiers",Southwestern U.S.A.
+WNAI43,Cahto,39.7,-123.3,kato1244,Kato Athapaskan (J43),xd1425,Kato; Kato Athapaskan,,,,39.7,123.3,Original,,Southwestern U.S.A.
+WNAI44,Shasta (East),41.5,-122.3,shas1239,East Shasta (J44),xd1093,East Shasta,,,,41.5,122.3,Original,,Southwestern U.S.A.
+WNAI45,Shasta (West),41.8,-122.8,shas1239,West Shasta (J45),xd1093,West Shasta,,,,41.8,122.8,Original,,Southwestern U.S.A.
+WNAI46,Chimariko,40.7,-123.2,chim1301,Chimariko (J46),xd1094,,,,,40.7,123.2,Original,,Southwestern U.S.A.
+WNAI47,Wintu (Trinity River),40.6,-123.2,nucl1651,Trinity River Wintu (J47),xd1112,Northern Wintu; Trinity River Wintu,,,,40.6,123.2,Original,Changed 15Nov2016 to differentiate Nomlaki from Wintu,Southwestern U.S.A.
+WNAI48,Wintu (McCloud River),40.8,-122.4,nucl1651,McCloud River Wintu (J48),xd1112,Northern Wintu; McCloud River Wintu,,,,40.8,122.4,Original,Changed 15Nov2016 to differentiate Nomlaki from Wintu,Southwestern U.S.A.
+WNAI49,Wintu (Sacramento River),41.2,-122.4,nucl1651,Sacramento River Wintu (J49),xd1112,Northern Wintu; Sacramento River Wintu,,,,41.2,122.4,Original,Changed 15Nov2016 to differentiate Nomlaki from Wintu,Southwestern U.S.A.
+WNAI50,Nomlaki,39.5,-122.5,noml1242,Nomlaki Wintun (J50),xd1107,Central Wintun; Nomlaki Wintun,,,,39.5,122.5,Original,Changed 15Nov2016 to differentiate Nomlaki from Wintu,Southwestern U.S.A.
+WNAI51,Achumawi (East),41.4,-120.5,achu1247,East Achomawi (J51),xd1108,Achomawi; East Achomawi,,,,41.4,120.5,Original,,Southwestern U.S.A.
+WNAI52,Achumawi (West),41.2,-121.4,achu1247,West Achomawi (J52),xd1108,Achomawi; West Achomawi,,,,41.2,121.4,Original,,Southwestern U.S.A.
+WNAI53,Atsugewi,40.5,-121.3,atsu1245,Atsugewei (J53),xd1135,Atsugewei,,,,40.5,121.3,Original,,Southwestern U.S.A.
+WNAI54,Valley Maidu,39.7,-121.9,vall1252,Valley Maidu (J54),xd1432,,,,,39.7,121.9,Original,,Southwestern U.S.A.
+WNAI55,Foothill Maidu,39.8,-121.3,nort2951,Foothill Maidu (J55),xd1433,,,,,39.8,121.3,Original,,Southwestern U.S.A.
+WNAI56,Maidu,40.2,-121,nort2952,Mountain Maidu (J56),xd1110,Pujunan; Mountain Maidu,,,,40.2,121,Original,,Southwestern U.S.A.
+WNAI57,Nisenan (Foothill),39.4,-121.1,nise1244,Foothill Nisenan (J57),xd1111,Southern Maidu; Nisenan Southern Maidu; Foothill Nisenan,,,,39.4,121.1,Original,,Southwestern U.S.A.
+WNAI58,Nisenan (Mountain),39.3,-120.9,nise1244,Mountain Nisenan (J58),xd1111,Southern Maidu; Nisenan Southern Maidu; Mountain Nisenan,,,,39.3,120.9,Original,,Southwestern U.S.A.
+WNAI59,Nisenan (Southern),38.8,-121,nise1244,Southern Nisenan (J59),xd1111,Southern Maidu; Nisenan Southern Maidu; Southern Nisenan,,,,38.8,121,Original,,Southwestern U.S.A.
+WNAI60,Coast Yuki,39.4,-123.6,yuki1243,Coast Yuki (J60),xd1113,,,Yuki (NS30),NS30,39.4,123.6,Original,,Southwestern U.S.A.
+WNAI61,Yuki,39.8,-123.2,yuki1243,Yuki (J61),xd1138,,,Yuki (NS30),NS30,39.8,123.2,Original,,Southwestern U.S.A.
+WNAI62,Yana,40.5,-122,yana1271,Yana (J62),xd1109,Nozi,,,,40.5,122,Original,,Southwestern U.S.A.
+WNAI63,Northern Pomo,39.6,-123.3,nort2966,Northern Pomo (J63),xd1115,,,Pomo (NS18),NS18,39.6,123.3,Original,,Southwestern U.S.A.
+WNAI64,Eastern Pomo,39,-123,east2545,Eastern Pomo (J64),xd1116,Clear Lake Pomo; Eastern Pomo,,Pomo (NS18),NS18,39,123,Original,,Southwestern U.S.A.
+WNAI65,Southern Pomo,38.5,-123,sout2984,Southern Pomo (J65),xd1117,Southern Pomo,,Pomo (NS18),NS18,38.5,123,Original,,Southwestern U.S.A.
+WNAI66,Wappo,38.7,-123,wapp1239,Wappo Yukian (J66),xd1119,Wappo Yukian,,,,38.7,123,Original,,Southwestern U.S.A.
+WNAI67,Patwin,38.7,-122,patw1250,Patwin Wintun (J67),xd1121,Southern Wintun; Patwin Wintun,,,,38.7,122,Original,,Southwestern U.S.A.
+WNAI68,Northern Miwok,38.5,-121,nort2968,Northern Miwok (J68),xd1420,,,,,38.5,121,Original,,Southwestern U.S.A.
+WNAI69,Central Sierra Miwok,38,-120,cent2140,Central Miwok (J69),xd1136,Central Sierra Miwok; Miwok,,,,38,120,Original,,Southwestern U.S.A.
+WNAI70,Southern Miwok,37.5,-119.5,sout2985,Southern Miwok (J70),xd1421,,,,,37.5,119.5,Original,,Southwestern U.S.A.
+WNAI71,North Fork Mono,37.5,-119,mono1275,San Joaquin Mono (Uto-Aztecan) (J71),xd993,North Fork Mono; Northfork Mono; Mono-North Fork Paiute; Norfolk Mono; Western Mono; San Joaquin Mono (Uto-Aztecan),,,,37.5,119,Original,,Southwestern U.S.A.
+WNAI72,Kings River Western Mono,36.7,-119,mono1275,Kings River Mono (Uto-Aztecan) (J72),xd1122,Monachi; Western Mono; Monache; Kings River Mono (Uto-Aztecan),,,,36.7,119,Original,,Southwestern U.S.A.
+WNAI73,Northern Foothills Yokuts,37.2,-119.8,nort2937,Chuckchansi Yokuts (J73),xd1129,Northern Foothill Yokuts; Chuckchansi Yokuts,,Yokuts (NS29),NS29,37.2,119.8,Original,,Southwestern U.S.A.
+WNAI74,Kings River Yokuts,36.8,-119.4,sout2955,Kings River Yokuts (J74),xd1436,Central Foothill Yokuts,,Yokuts (NS29),NS29,36.8,119.4,Original,,Southwestern U.S.A.
+WNAI75,Wukchumni,36.4,-119.1,tule1245,Kaweah Yokuts (J75),xd1124,Kawi'a; Kaweah; Kaweah Yokuts; Central Foothills Yokuts,,Yokuts (NS29),NS29,36.4,119.1,Original,,Southwestern U.S.A.
+WNAI76,Southern Valley Yokuts (Lake),36.2,-120,vall1251,Lake Yokuts (J76),xd1123,Lake Yokuts; Tachi Yokuts; Chunut Yokuts,,Yokuts (NS29),NS29,36.2,120,Original,,Southwestern U.S.A.
+WNAI77,Southern Valley Yokuts (Yauelmani),35.3,-118.8,vall1251,Yauelmani Yokuts (J77),xd1123,Yowlumne; Yawelmani; Southern Valley Yokuts,,Yokuts (NS29),NS29,35.3,118.8,Original,,Southwestern U.S.A.
+WNAI78,Tübalulabal,36,-118.2,tuba1278,Tubatulabal (J78),xd1118,Tubatulabal,,Tubatulabal (NS22),NS22,36,118.2,Original,,Southwestern U.S.A.
+WNAI79,Kawaiisu,35.5,-118.5,kawa1283,Kawaiisu (J79),xd1126,Kawaiisu Shoshoni,,,,35.5,118.5,Original,,Southwestern U.S.A.
+WNAI80,Salinan,35,-120,sali1253,Salinan (J80),xd1125,,,,,35,120,Original,,Southwestern U.S.A.
+WNAI81,Tongva,34.8,-118,tong1329,Gabrielino (J81),xd1128,Gabrielo; Gabrielino; Gabrieleno,,,,34.8,118,Original,,Southwestern U.S.A.
+WNAI82,Luiseño,33.3,-117.3,luis1253,Luiseno (J82),xd1133,Payómkawichum; Luiseno,,,,33.3,117.3,Original,,Southwestern U.S.A.
+WNAI83,Cupeño,33.2,-116.7,cupe1243,Cupeno (J83),xd1132,Kuupangaxwichem; Cupeno,,,,33.2,116.7,Original,,Southwestern U.S.A.
+WNAI84,Serrano,34.2,-117,serr1255,Serrano (J84),xd1130,,,,,34.2,117,Original,,Southwestern U.S.A.
+WNAI85,Cahuilla (Desert),33.5,-116.2,cahu1264,Desert Cahuilla (J85),xd1131,Desert Cahuilla,,,,33.5,116.2,Original,"Note, three Cahuilla Dialects (Mountain, Pass, Desert) are recognized by some, but Glottolog does not list any dialects",Southwestern U.S.A.
+WNAI86,Cahuilla (Pass),33.8,-116.7,cahu1264,Pass Cahuilla (J86),xd1439,Pass Cahuilla,,,,33.8,116.7,Original,"Note, three Cahuilla Dialects (Mountain, Pass, Desert) are recognized by some, but Glottolog does not list any dialects",Southwestern U.S.A.
+WNAI87,Cahuilla (Mountain),33.3,-116.5,cahu1264,Mountain Cahuilla (J87),xd1440,Mountain Cahuilla,,,,33.3,116.5,Original,"Note, three Cahuilla Dialects (Mountain, Pass, Desert) are recognized by some, but Glottolog does not list any dialects",Southwestern U.S.A.
+WNAI88,Kumeyaay (Mountain Diegueno),33,-117,kumi1248,Mountain Diegueno (J88),xd1437,Eastern Ipai; Northern Kumeyaay,,,,33,117,Original,"Note 8Feb2018: Glottocode updated from ipai1239 to kumi1248; Previously ipai1239, updated to  ipai1240 by @kirbykat 27 April 2017",Southwestern U.S.A.
+WNAI89,Kumeyaay (Western Diegueno),32.7,-117.1,kumi1248,Western Diegueno (J89),xd1137,Western Ipai and Western Tipai; Southern Kumeyaay,,,,32.7,117.1,Original,"Note, previously tipa1240 but changed by non-KK DPLACE editor in early 2016 (before 8April2016)",Southwestern U.S.A.
+WNAI90,Kumeyaay (Desert Diegueno),32.7,-116,kumi1248,Desert Diegueno (J90),xd1137,Tipai; Central and Southern Kumeyaay,,,,32.7,116,Original,"Note, previously tipa1240 but changed by non-KK DPLACE editor in early 2016 (before 8April2016)",Southwestern U.S.A.
+WNAI91,Kiliwa,31.5,-115,kili1268,Kaliwa (Hokan) (J91),xd1134,K'olew; Kaliwa (Hokan),,,,31.5,115,Original,,Mexico
+WNAI92,Akwa’ala,31.5,-115.8,paip1241,Akwa’ala (Hokan) (J92),xd1426,Paipai; Akwa’ala (Hokan),,,,31.5,115.8,Original,,Mexico
+WNAI93,Dakelh (Alkatcho Carrier),55,-127,carr1249,Alkatcho Carrier (J93),xd1035,Carrier; Takulli; Alkatcho Carrier,,,,55,127,Original,,Western Canada
+WNAI94,Dakelh (Lower Carrier),53,-122.7,carr1249,Lower Carrier (J94),xd1035,Carrier; Takulli; Lower Carrier,,,,53,122.7,Original,,Western Canada
+WNAI95,Chilcotin,51.7,-125,chil1280,Chilcotin (J95),xd1206,Tsilhqot'in,,,,51.7,125,Original,,Western Canada
+WNAI96,Shuswap,51.3,-120,shus1248,Shuswap (J96),xd1143,Secwepemc,,,,51.3,120,Original,,Western Canada
+WNAI97,Lillooet,50.3,-122.5,lill1248,Upper Lillooet (J97),xd1207,St'at'imc; Stlatlum; Upper Lillooet,,,,50.3,122.5,Original,,Western Canada
+WNAI98,Nlaka'pamux,50.3,-121.5,thom1243,Upper Thompson (J98),xd1142,Thompson; Nitlakapamuk; Thompson River Salish; Upper Thompson,,,,50.3,121.5,Original,,Western Canada
+WNAI99,Syilx,48.8,-119.5,sout2963,Southern Okanagon (J99),xd1001,Okanagan; Southern Okanagon,,,,48.8,119.5,Original,,Northwestern U.S.A.
+WNAI100,Sanpoil,48,-118.7,sanp1257,Sanpoil (J100),xd1174,,,Southeast (NR19),NR19,48,118.7,Original,,Northwestern U.S.A.
+WNAI101,Sinkiuse-Columbia,47,-119.5,colu1250,"Columbia (Salish, Interior) (J101)",xd1419,Sinkiuse; Columbia (Salish; Interior),,,,47,119.5,Original,,Northwestern U.S.A.
+WNAI102,Wenatchi,47.5,-120.3,wena1241,Wenatchi (J102),xd1148,,,,,47.5,120.3,Original,,Northwestern U.S.A.
+WNAI103,Coeur d’Alene,47.7,-117,coeu1236,Coeur d’Alene (J103),xd1146,Schitsu'umsh; Skitswish,,Southeast (NR19),NR19,47.7,117,Original,,Northwestern U.S.A.
+WNAI104,Kalispel,48.2,-116.2,kali1309,Kalispel (J104),xd1145,,,Southeast (NR19),NR19,48.2,116.2,Original,,Northwestern U.S.A.
+WNAI105,Bitterroot Salish,47.5,-114,kali1309,Flathead (J105),xd1144,Salish; Flathead,,Southeast (NR19),NR19,47.5,114,Original,,Northwestern U.S.A.
+WNAI106,Kutenai,49,-116.4,kute1249,Kutenai (J106),xd1205,Ktunaxa; Kootenay; Kootenai,,,,49,116.4,Original,,Western Canada
+WNAI107,Nez Perce,46,-117,nezp1238,Nez Perce (J107),xd1153,Nimi'ipuu; Sahaptin,,,,46,117,Original,,Northwestern U.S.A.
+WNAI108,Umatilla,46,-119,umat1237,Umatilla (J108),xd1151,,,,,46,119,Original,,Northwestern U.S.A.
+WNAI109,Klikitat,45.8,-121.5,klik1240,Klikitat (J109),xd1435,Klickitat,,,,45.8,121.5,Original,,Northwestern U.S.A.
+WNAI110,Wishram,45.5,-121.2,wasc1239,Wishram (J110),xd1150,,,,,45.5,121.2,Original,,Northwestern U.S.A.
+WNAI111,Tenino,45.4,-121.5,teni1238,Tenino (J111),xd1141,Warmsprings Sahaptin; Yenino,,,,45.4,121.5,Original,,Northwestern U.S.A.
+WNAI112,Klamath,42.5,-122,klam1254,Klamath (J112),xd1139,,,Klamath (NR10),NR10,42.5,122,Original,,Northwestern U.S.A.
+WNAI113,Modoc,42,-121.7,klam1254,Modoc (J113),xd1140,,,,,42,121.7,Original,,Northwestern U.S.A.
+WNAI114,Wadadokado,43.3,-119,nort1551,Wada-Dokado Northern Paiute (J114),xd1155,Paiute; Northern Paiute; Wada-Dokado Northern Paiute,,Northern Paiute (NR13),NR13,43.3,119,Original,,Northwestern U.S.A.
+WNAI115,Kidutokado,42,-120,nort1551,Kidu-Dokado Northern Paiute (J115),xd1157,Gididika; Surprise Valley Paiute; Kidu-Dokado Northern Paiute,,Northern Paiute (NR13),NR13,42,120,Original,,Northwestern U.S.A.
+WNAI116,Kuyuidokado,40,-119.5,sout2967,Kuyui-Dokado Northern Paiute (J116),xd1160,Pyramid Lake Paiute; Kuyui-Dokado Northern Paiute,,Northern Paiute (NR13),NR13,40,119.5,Original,,Southwestern U.S.A.
+WNAI117,Eastern Mono,38,-119,mono1275,Owens Valley Northern Paiute (J117),xd1164,Owens Valley Paiute; Owens Valley Northern Paiute,,,,38,119,Original,,Southwestern U.S.A.
+WNAI118,Tümpisa Shoshone (Panamint),36,-117,pana1305,Panamint Shoshone (J118),xd1166,Panamint; California Shoshone,,Western (NT22),NT22,36,117,Original,,Southwestern U.S.A.
+WNAI119,Washo,39,-120,wash1253,Washo (J119),xd1196,,,Washo (NT20),NT20,39,120,Original,,Southwestern U.S.A.
+WNAI120,Mahaguaduka,39.3,-117.3,west2622,Reese River Shoshone (J120),xd1169,Reese River Shoshoni; Reese River Shoshone,,Western (NT22),NT22,39.3,117.3,Original,,Southwestern U.S.A.
+WNAI121,Spring Valley Shoshoni,39.3,-114.5,west2622,Spring Valley Shoshone (J121),xd995,Spring Valley,,,,39.3,114.5,Original,,Southwestern U.S.A.
+WNAI122,Wadaduka,40.8,-115.2,west2622,Ruby Valley Shoshone (J122),xd1176,Ruby Valley Shoshoni; Pine Creek Shoshoni; Diamond Valley Shoshoni; Egan Canyon Shoshoni; Ruby Valley Shoshone,,,,40.8,115.2,Original,,Southwestern U.S.A.
+WNAI123,White Knife Shoshoni,40.8,-117,west2622,Battle Mountain Shoshone (J123),xd1178,Battle Mountain (White Knife) Shoshone; White Knife Shoshoni; Battle Mountain Shoshoni; Tosawihi,,,,40.8,117,Original,,Southwestern U.S.A.
+WNAI124,Gosiute,40,-114,gosi1242,Gosiute Shoshone (J124),xd1183,Gosiute Shoshoni; Deep Creek Shoshoni; Gosiute Shoshone,,Western (NT22),NT22,40,114,Original,,Southwestern U.S.A.
+WNAI125,Bohogue,43,-113,nort2955,Bohogue Shoshone (J125),xd1180,Fort Hall Shoshoni; Bohogue Shoshone,,,,43,113,Original,,Northwestern U.S.A.
+WNAI126,Agaiduka,45,-113.8,nort2955,Agaiduka Shoshone (J126),xd1182,Agaiduka; Salmon-Eater Shoshoni; Lemhi River Shoshoni; Agaiduku (Lemhi) Shoshone,,,,45,113.8,Original,,Northwestern U.S.A.
+WNAI127,Hukundika,41.7,-112,nort2955,Hukundika Shoshone (J127),xd1185,Seed-Eaters; Northern Shoshoni; Hukunduka; Hukuniduica; Hukundika Shoshone; Promontory Shoshone,,,,41.7,112,Original,,Southwestern U.S.A.
+WNAI128,Wind River Eastern Shoshone,43,-109,nort2955,Wind River Shoshone (J128),xd1201,Wind River; Eastern Shoshoni; Kucundika; Buffalo Hunters; Buffalo-Eater; Wind River Shoshone,,,,43,109,Original,,Northwestern U.S.A.
+WNAI129,Uintah Ute,40,-111,utee1244,Uintah Ute (J129),xd1194,Tompanowots; Yampa,,,,40,111,Original,,Southwestern U.S.A.
+WNAI130,Uncompahgre Ute,38,-108,utee1244,Uncompaghre Ute (J130),xd1199,Mowataviwatsiu,,,,38,108,Original,,Northwestern U.S.A.
+WNAI131,Southern Ute,38,-109,utee1244,Wimonuch Ute (Shoshonean) (J131),xd1152,Wimonuch Utes; Ute Mountain Ute; Wimonutsi; Navajo Springs; Wimonuntci; Weminute; Wimonantci Ute,,Ute (NT19),NT19,38,109,Original,,Northwestern U.S.A.
+WNAI132,Shivwits,36.8,-114,sout2969,Shivwits Southern Paiute (J132),xd1188,Shivwits; Suwuntsu (St. George); Suwuntsu; St. George; Gunlock; Uinkaret; Southern Paiute,,,,36.8,114,Original,,Southwestern U.S.A.
+WNAI133,Southern Paiute (Kaibab and Las Vegas),36.5,-112,sout2969,Kaibab Southern Paiute (J133),xd1189,Kaivavwits; Southern Paiute; Southern Paiute; Kaibab Southern Paiute,,,,36.5,112,Original,,Southwestern U.S.A.
+WNAI134,San Juan,37,-110,sout2969,San Juan Southern Paiute (J134),xd1192,San Juan; Kwaanitikwokets,,,,37,110,Original,,Southwestern U.S.A.
+WNAI135,Chemehuevi,34.3,-116,chem1251,Chemehuevi Southern Paiute (J135),xd1190,Chemehuevi; Colorado River Reservation,,Southern (NT16),NT16,34.3,116,Original,,Southwestern U.S.A.
+WNAI136,Havasupai,36.2,-112.8,hava1249,Havasupai (J136),xd1163,Plateau Yuma,,Plateau Yumans (NT14),NT14,36.2,112.8,Original,,Southwestern U.S.A.
+WNAI137,Hualapai,35.3,-114,wala1270,Walapai (J137),xd1202,Walapai,,,,35.3,114,Original,,Southwestern U.S.A.
+WNAI138,Yavapai (Northeast),34.6,-112.2,yava1252,Northeast Yavapai (J138),xd1203,Apache-Mojave; Northeast Yavapai,,,,34.6,112.2,Original,,Southwestern U.S.A.
+WNAI139,Yavapai (Southeast),33.7,-111.5,yava1252,Southeast Yavapai (J139),xd1203,Apache-Mojave; Southeast Yavapai,,,,33.7,111.5,Original,,Southwestern U.S.A.
+WNAI140,Mojave,34.5,-114.5,moha1256,Mohave (J140),xd1272,Mohave,,Mohave (NT28),NT28,34.5,114.5,Original,,Southwestern U.S.A.
+WNAI141,Quechan,32.7,-114.5,quec1382,Yuma (J141),xd1273,Yuma,,,,32.7,114.5,Original,,Southwestern U.S.A.
+WNAI142,Kamia,32.5,-115,kumi1248,Kamia (J142),xd1271,,,,,32.5,115,Original,"Note, previously kimi1238 but changed by non-KK DPLACE editor in early 2016 (before 8April2016)",Mexico
+WNAI143,Cocopa,32,-115,coco1261,Cocopa (J143),xd1269,Cocopah,,,,32,115,Original,,Mexico
+WNAI144,Maricopa,33.3,-112.5,mari1440,Maricopa (J144),xd1281,Piipash,,River (NT15),NT15,33.3,112.5,Original,,Southwestern U.S.A.
+WNAI145,Pima,33.2,-112,akim1239,Pima (J145),xd1291,Akimel O'Odham,,,,33.2,112,Original,,Southwestern U.S.A.
+WNAI146,Tohono O'odham,32,-112,toho1246,Papago (J146),xd1287,Papago,,O'Odham (NU79),NU79,32,112,Original,,Southwestern U.S.A.
+WNAI147,Western Apache (North Tonto),35,-111.8,west2615,North Tonto Western Apache (J147),xd1267,Ndee; Western Apache; North Tonto Western Apache,,Western (NT21),NT21,35,111.8,Original,,Southwestern U.S.A.
+WNAI148,Western Apache (South Tonto),34,-111.2,west2615,South Tonto Western Apache (J148),xd1267,Ndee; Western Apache; South Tonto Western Apache,,Western (NT21),NT21,34,111.2,Original,,Southwestern U.S.A.
+WNAI149,Western Apache (San Carlos),33.5,-110.8,west2615,San Carlos Western Apache (J149),xd1267,Ndee; Western Apache; San Carlos Western Apache,,Western (NT21),NT21,33.5,110.8,Original,,Southwestern U.S.A.
+WNAI150,Western Apache (Cibecue),34.6,-110.6,west2615,Cibecue Western Apache (J150),xd1267,Ndee; Western Apache; Cibecue Western Apache,,Western (NT21),NT21,34.6,110.6,Original,,Southwestern U.S.A.
+WNAI151,Western Apache (White Mountain),33.8,-110,west2615,White Mountain Western Apache (J151),xd1267,Ndee; Western Apache; White Mountain Western Apache,,Western (NT21),NT21,33.8,110,Original,,Southwestern U.S.A.
+WNAI152,Chiricahua (Warm Springs),33,-108,mesc1238,Warm Springs Chiricahua Apache (J152),xd1259,Chiricahua Apache; Eastern Apache; Warm Springs Chiricahua Apache,,Eastern Apache (NT08),NT08,33,108,Original,,South-Central U.S.A.
+WNAI153,Chiricahua (Huachuca),31.8,-110,mesc1238,Huachuca Chiricahua Apache (J153),xd1259,Chiricahua Apache; Eastern Apache; Huachuca Chiricahua Apache,,Eastern Apache (NT08),NT08,31.8,110,Original,,Southwestern U.S.A.
+WNAI154,Mescalero,32.5,-105,mesc1238,Mescalero Apache (J154),xd1265,Mescalero Apache,,,,32.5,105,Original,,South-Central U.S.A.
+WNAI155,Lipan Apache,30,-104,lipa1241,Lipan Apache (J155),xd1275,Lipan,,,,30,104,Original,,South-Central U.S.A.
+WNAI156,Jicarilla,37,-105.5,jica1244,Jicarilla Apache (J156),xd1266,Jicarilla Apache,,Jicarilla (NT26),NT26,37,105.5,Original,,Northwestern U.S.A.
+WNAI157,Navajo (Western),36,-112,nava1243,Western Navaho (J157),xd1279,Diné Bizaad; Navaho; Western Navaho,,Navaho (NT13),NT13,36,112,Original,,Southwestern U.S.A.
+WNAI158,Navajo (Eastern),35.5,-108.7,nava1243,Eastern Navaho (J158),xd1279,Diné Bizaad; Navaho; Eastern Navaho,,Navaho (NT13),NT13,35.5,108.7,Original,,South-Central U.S.A.
+WNAI159,Hopi,36,-110.5,hopi1249,Hopi (J159),xd1268,Hopi of Old Oraiibi,,Hopi (NT09),NT09,36,110.5,Original,,Southwestern U.S.A.
+WNAI160,Zuni,35.2,-108.9,zuni1245,Zuni (J160),xd1280,,,Zuni (NT23),NT23,35.2,108.9,Original,,South-Central U.S.A.
+WNAI161,Acoma,35,-107.5,acom1246,Acoma (J161),xd1263,,,,,35,107.5,Original,,South-Central U.S.A.
+WNAI162,Sia,35.3,-106.5,ziaa1251,Sia Keres (J162),xd1276,Sia; Tsiya; Zia,,Zia Pueblo (NT38),NT38,35.3,106.5,Original,,South-Central U.S.A.
+WNAI163,Santa Ana,35.2,-106.4,sant1426,Santa Ana Keres (J163),xd1262,Santa Ana Keres,,,,35.2,106.4,Original,,South-Central U.S.A.
+WNAI164,Kewa,35.3,-106.1,sant1425,Santo Domingo Keres (J164),xd1278,Kewa; Santo Domingo; Santo Domingo Pueblo,,,,35.3,106.1,Original,,South-Central U.S.A.
+WNAI165,Cochiti,35.6,-106,coch1273,Cochiti (J165),xd1283,,,,,35.6,106,Original,,South-Central U.S.A.
+WNAI166,Ohkay Owingeh,36.1,-106.1,sanj1276,San Juan Tewa (J166),xd1429,San Juan Tewa,,Tewa Pueblos (NT18),NT18,36.1,106.1,Original,,South-Central U.S.A.
+WNAI167,San Ildefonso,35.9,-106.2,sani1273,San Ildefonso Tewa (J167),xd1261,San Ildefonso; Tewa; San Ildefonso Pueblo,,Tewa (NT18),NT18,35.9,106.2,Original,"Note 8Feb2018: Not changed, as focus is the pueblo of San Ildefonso, despite comment from HH: ""Hopi Tewa now has its own language-level glottocode Arizona Tewa ariz1237"". However, ariz1237 now linked to another society in EA.",South-Central U.S.A.
+WNAI168,Santa Clara,36,-106.3,sant1421,Santa Clara Tewa (J168),xd1277,Santa Clara Tewa,,,,36,106.3,Original,,South-Central U.S.A.
+WNAI169,Nambé Pueblo,35.9,-105.9,namb1296,Nambe Tewa (J169),xd1430,Nambe Tewa,,Tewa Pueblos (NT18),NT18,35.9,105.9,Original,,South-Central U.S.A.
+WNAI170,Taos,36.5,-105.5,taos1236,Taos (J170),xd1282,,,Taos (NT17),NT17,36.5,105.5,Original,,South-Central U.S.A.
+WNAI171,Isleta,34.8,-106.7,sout2961,Isleta (J171),xd1260,,,,,34.8,106.7,Original,,South-Central U.S.A.
+WNAI172,Jemez,35.8,-106.8,jeme1245,Jemez (J172),xd1284,Walatowa; Towa,,,,35.8,106.8,Original,,South-Central U.S.A.

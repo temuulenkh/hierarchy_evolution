@@ -1,0 +1,1181 @@
+---
+title: "Analysis of oak and acorn terms across languages"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
+```
+
+```{r libraries}
+library(tidyverse)
+library(here)
+library(dplyr)
+library(brms)
+library(bridgesampling)
+library(xtable)
+library(patchwork)
+library(lingtypology) # Glottolog version 5.2
+library(stringdist)
+
+select <- dplyr::select
+```
+
+This notebook contains analyses of oak and acorn terms across North American languages, collected by Brown (2001). 
+
+First load oak-related terms and species occurrence data. 
+
+```{r n and occurrence data, include=TRUE}
+
+oak_raw <- read_csv(here("data", "oak_occurrences.csv"), show_col_types = FALSE)
+
+oak <- oak_raw %>%
+  group_by(glottocode) %>%
+  # estimate number of species for each language
+  mutate(n = n_distinct(species)) %>%
+  ungroup()
+
+# see if the area size and number of species are correlated
+check <- oak %>% 
+  group_by(glottocode, langname, n, area_km2) %>%
+  summarise(total = sum(occurrence, na.rm=TRUE)) %>%
+  ungroup()
+cor.test(check$n, check$area_km2)
+# looks good 
+
+oak <- oak %>%
+  select(glottocode, species, occurrence, n, GOT, SOT, AGR, GAT, SAT, ACN, langname, family, longitude, latitude, subarea)
+# n: number of distinct species
+# GOT: presence of oak generic
+# SOT: # of oak specifics
+# AGR: subsistence strategy
+# GAT: presence of acorn generic
+# SAT: # of acorn specifics
+# ACN: acorn use
+# longitude: Glottolog longitude
+# latitude: Glottolog latitude
+# subarea: assigned sub area by Brown
+
+oak <- oak %>%
+  # some languages were assigned the same glottocode, so we add their name to distinguish
+  mutate(glottocode = if_else(n > 1, str_c(glottocode, "_", langname), glottocode)) %>%
+  select(-langname)
+
+oak <- oak %>%
+  group_by(glottocode) %>%
+  # estimate total occurrence of oak species
+  mutate(total_occ = sum(occurrence)) %>%
+  ungroup()
+
+oak <- oak %>%
+  mutate(
+    AGR = recode(AGR, "hunter-gatherer" = "forager", "agriculturalist" = "farmer"),
+    ACN = recode(ACN, "user" = "user", "nonuser" = "non-user")
+  )
+
+oak <- oak %>%
+  # estimate proportion of occurrence of a single species
+  mutate(p_i = occurrence / total_occ)
+
+oak <- oak %>%
+  group_by(glottocode) %>%
+  # estimate Shannon index based on that proportion
+  mutate(H = -sum(p_i * log(p_i))) %>%
+  ungroup()
+
+# assign system types
+oak <- oak %>%
+  mutate(
+    oak_system = case_when(
+      SOT > 0 & GOT == "absent" ~ "spec.only",
+      SOT == 0 & GOT == "present" ~ "gen.only",
+      SOT > 0 & GOT == "present" ~ "two.level",
+      TRUE ~ NA_character_
+    )
+  )
+
+oak <- oak %>%
+  mutate(
+    acorn_system = case_when(
+      SAT > 0 & GAT == "absent" ~ "spec.only",
+      SAT == 0 & GAT == "present" ~ "gen.only",
+      SAT > 0 & GAT == "present" ~ "two.level",
+      TRUE ~ NA_character_
+    )
+  )
+
+oakacorn <- oak %>%
+  select(glottocode, n, GOT, SOT, AGR, GAT, SAT, ACN, H, oak_system, acorn_system, family, longitude, latitude, subarea) %>%
+  distinct()
+```
+
+It should be noted that Brown (2001) included languages that have at least two different specific terms and excluded languages that have only one species. According to our approximation of number of species present, the smallest number is 3.
+
+Brown (2001) noted that the Handbook of North American Indians (Sturtevant 1978), Handbook of Middle American Indians (Wauchope 1964), the Indians of the Southeastern United States (Swanton 1946) were mainly used for assigning subsistence and acorn use (page 123). We'll first confirm these variables.
+
+## Subsistence and acorn use
+
+We'll use Native American Ethnobotany DB data which was based on the book Native American Ethnobotany (Moerman 1998) and D-PLACE dataset derived from Jorgensen 1980 'Western Indians' (Jorgensen, J. 2025) to confirm acorn use. 
+
+```{r}
+naeb_lang <- read_csv(here("data", "naeb_tribes.csv"), show_col_types = FALSE)
+length(unique(naeb_lang$tribe_name)) # 291 cultures total
+
+naeb_raw <- read_csv(here("data", "naeb_quercus.csv"), show_col_types = FALSE)
+length(unique(naeb_raw$culture)) # 93 has recorded use of oak
+
+# first map those 291 cultures with glottocodes
+naeb_cultures <- naeb_lang %>% distinct(tribe_name) %>% pull(tribe_name)
+
+# take language data from Glottolog
+glotto_langs <- glottolog %>%
+  distinct(glottocode, language, level)
+
+normalize <- function(x) tolower(trimws(x))
+
+find_glottocode <- function(culture, gl) {
+  # 1. Exact match
+  hit <- gl %>% filter(normalize(language) == normalize(culture))
+  if (nrow(hit) == 1) return(tibble(culture = culture, glottocode = hit$glottocode, match = "exact"))
+
+  # 2. "X, Y" → "Y X" reorder (e.g. "Apache, Western" → "Western Apache")
+  if (grepl(",", culture)) {
+    parts     <- str_split(culture, ",\\s*")[[1]]
+    reordered <- paste(rev(parts), collapse = " ")
+    hit <- gl %>% filter(normalize(language) == normalize(reordered))
+    if (nrow(hit) == 1) return(tibble(culture = culture, glottocode = hit$glottocode, match = "reordered"))
+  }
+
+  # 3. Remove dialect/variant suffixes in parentheses (e.g. "Tzotzil (Zinacantan)" → "Tzotzil")
+  stripped <- str_remove(culture, "\\s*\\(.*\\)")
+  if (stripped != culture) {
+    hit <- gl %>% filter(normalize(language) == normalize(stripped))
+    if (nrow(hit) == 1) return(tibble(culture = culture, glottocode = hit$glottocode, match = "stripped"))
+  }
+
+  tibble(culture = culture, glottocode = NA_character_, match = "none")
+}
+
+culture_glotto <- map_dfr(naeb_cultures, find_glottocode, gl = glotto_langs) %>%
+  left_join(glottolog %>% select(glottocode, language), by = "glottocode")
+
+# let's try to string match Brown languages with those with no glottocode
+glotto_none <- culture_glotto %>%
+  filter(is.na(glottocode))
+
+oak_names    <- unique(oak_raw$langname)        
+none_names   <- unique(glotto_none$culture)         
+
+# For each unmatched name, find the closest name
+matches <- tibble(none_name = none_names) %>%
+  mutate(
+    best_match = oak_names[amatch(none_name, oak_names, method = "jw", maxDist = 0.25)],
+    dist       = stringdist(none_name, best_match, method = "jw")
+  ) %>%
+  arrange(dist) %>%
+  left_join(oak_raw %>% distinct(glottocode, best_match=langname), by = "best_match") %>%
+  # these cases seem to be wrong
+  mutate(glottocode = ifelse(best_match %in% c("Nisenan", "Achumawi", "Plains Miwok", "Cuicatec"), NA, glottocode)) %>%
+  mutate(glottocode = ifelse(best_match == "Klamath" & none_name == "Kamia", NA, glottocode))
+
+culture_glotto_full <- culture_glotto %>%
+  filter(!is.na(glottocode)) %>%
+  distinct(culture, glottocode) %>%
+  bind_rows(matches %>%
+              filter(!is.na(glottocode)) %>%
+                       select(culture=none_name, glottocode))
+length(unique(culture_glotto_full$culture))  # 145 cultures have glottocodes assigned
+
+oak_glotto <- oak_raw %>%
+  distinct(glottocode, langname)
+
+oak_with_naeb <- oak_glotto %>%
+  left_join(culture_glotto_full, by = "glottocode", relationship = "many-to-many")
+
+oak_with_naeb %>%
+  filter(!is.na(culture)) %>%
+  nrow()# 40 of the Brown languages have some information in NAEB
+
+# we estimate usage diversity per language in Brown data
+naeb_quercus_by_glotto <- naeb_raw %>%
+  left_join(oak_with_naeb %>% filter(!is.na(culture)) %>% select(culture, glottocode),
+            by = "culture") %>%
+  filter(!is.na(glottocode)) %>%
+  group_by(glottocode) %>%
+  summarise(
+    naeb_n_uses    = n_distinct(paste(use_category, use_subcategory)),
+    naeb_n_species = n_distinct(paste(scientific_name, common_name)),
+    naeb_richness  = n_distinct(paste(scientific_name, use_category, use_subcategory)),
+    .groups = "drop"
+  )
+
+# languages in oak_with_naeb that have a culture match but no oak records get zero
+glottos_in_naeb <- oak_with_naeb %>% filter(!is.na(culture)) %>% distinct(glottocode)
+
+naeb_quercus_by_glotto <- glottos_in_naeb %>%
+  left_join(naeb_quercus_by_glotto, by = c("glottocode")) %>%
+  mutate(across(starts_with("naeb_"), ~ replace_na(.x, 0)))
+
+oakacorn <- oakacorn %>%
+  mutate(glottocode_base = str_extract(glottocode, "^[a-z]{4}[0-9]{4}")) %>%
+  left_join(naeb_quercus_by_glotto, by = c("glottocode_base" = "glottocode"), relationship = "many-to-many") %>%
+  select(-glottocode_base)
+
+```
+
+Now add data from D-Place:
+
+```{r}
+va <- read_csv(here("data/wnai", "variables.csv"), show_col_types = FALSE)
+so <- read_csv(here("data/wnai", "societies.csv"), show_col_types = FALSE)
+da <- read_csv(here("data/wnai", "data.csv"), show_col_types = FALSE)
+co <- read_csv(here("data/wnai", "codes.csv"), show_col_types = FALSE)
+
+wnai_acorn <- da %>%
+  filter(Var_ID == "WNAI156") %>%
+  select(Soc_ID, Var_ID, Value) %>%
+  inner_join(so %>% select(Soc_ID=ID, glottocode=Glottocode), by = "Soc_ID") %>%
+  # filter out missing data 
+  filter(!is.na(Value)) %>%
+  select(glottocode, acorn_use=Value) %>%
+  mutate(acorn_use = ifelse(acorn_use == "Acorns not eaten", 0, 1)) %>%
+  unique()
+  
+wnai_oak <- da %>%
+  filter(Var_ID %in% c(paste0("WNAI", 11:21))) %>%
+  select(Soc_ID, Var_ID, Value) %>%
+  inner_join(so %>% select(Soc_ID=ID, glottocode=Glottocode), by = "Soc_ID") %>%
+  # filter out missing data 
+  filter(!is.na(Value))  %>%
+  select(glottocode, Var_ID, oak_species=Value) %>%
+  mutate(oak_species = ifelse(oak_species == "Absent", 0, 1)) %>%
+  unique() %>%
+  filter(oak_species == 1) %>%
+  group_by(glottocode) %>%
+  summarise(n_wnai = n_distinct(Var_ID)) %>%
+  ungroup()
+  
+oakacorn <- oakacorn %>%
+  mutate(glottocode_base = str_extract(glottocode, "^[a-z]{4}[0-9]{4}")) %>%
+  left_join(wnai_acorn, by = c("glottocode_base" = "glottocode")) %>%
+  left_join(wnai_oak,   by = c("glottocode_base" = "glottocode")) %>%
+  select(-glottocode_base)
+
+oakacorn %>% filter(!is.na(n_wnai)) %>% nrow()
+# 21 languages have info in WNAI
+```
+
+In general, we'll assume that a particular culture has acorn use if any of the relevant sources indicate so (in other words, Brown's sources as well as two additional sources considered here). Let's first look at the acorn use:
+
+```{r}
+oakacorn %>%
+  filter(ACN == "non-user", acorn_use == 1)
+# Clallam has acorn use in WNAI dataset
+
+oakacorn %>%
+  filter(ACN == "non-user", naeb_n_uses > 0)
+# Comanche has acorn use in NAEB dataset
+
+# in general it looks sources tend to converge (many usage cases from WNAI and NAEB are also recorded as user in Brown data)
+# we'll fix these two languages
+oakacorn <- oakacorn %>%
+  mutate(ACN = ifelse(glottocode %in% c("coma1245_Comanche", "clal1241_Clallam"), "user", ACN))
+```
+
+WNAI has also listed some oak species and if they are present in the culture's area. Let's have a look at the relationship between our measure and the number of oak species recorded as present in WNAI. Note that our measure is much more detailed in terms of oak species classification, but it has also some limitations.
+
+```{r, fig.height=3, fig.width=3}
+ggplot(oakacorn, aes(x = n_wnai, y = n)) + geom_point(alpha=0.3) + geom_smooth(method="lm") + theme_bw()
+cor.test(oakacorn$n, oakacorn$n_wnai)
+```
+
+Finally, we'll use subsistence data from Khishigsuren et al. (2025), which was based on several sources (see sources column and associated description here: https://github.com/cskemp/lexical_elaboration/tree/main/rawdata/downloaded), to see if any discrepancies with subsistence strategy.
+
+```{r}
+subsistence <- read_csv(here("data", "subsistence.csv"), show_col_types = FALSE) 
+
+oakacorn <- oakacorn %>%
+  mutate(glottocode_base = str_extract(glottocode, "^[a-z]{4}[0-9]{4}")) %>%
+  left_join(subsistence, by = c("glottocode_base" = "glottocode")) %>%
+  select(-glottocode_base)
+
+nrow(oakacorn[!is.na(oakacorn$subsistence), ])
+# we have 62 language that has subsistence information in Khishigsuren data
+
+oakacorn %>%
+  filter(AGR == "forager", subsistence == "other")
+# no forager cultures have otherwise indicated in Khishigsuren data
+
+check <- oakacorn %>%
+  filter(AGR == "farmer", subsistence == "hunter-gatherer")
+# some farmer cultures have indicated as hunter-gatherers in Guldemann et al. (2020)
+
+# we decided to follow Guldemann's classifications because they were primarily interested in identifying hunter-gatherer languages and more recent
+oakacorn <- oakacorn %>%
+ mutate(AGR = ifelse(!is.na(subsistence) & source =="guldemannmr_2020" & subsistence == "hunter-gatherer","forager", AGR))
+```
+
+## Explore the dataset
+
+Before running statistical analysis, let's look at some descriptive statistics:
+
+```{r}
+oakacorn <- oakacorn %>%
+  mutate(AGR_ACN = case_when(
+      AGR == "forager" & ACN == "non-user" ~ "forager-nonuser",
+      AGR == "forager" & ACN == "user"     ~ "forager-user",
+      AGR == "farmer"  & ACN == "non-user" ~ "farmer-nonuser",
+      AGR == "farmer"  & ACN == "user"     ~ "farmer-user",
+      TRUE ~ NA_character_
+    ))
+
+table(oakacorn$AGR, oakacorn$ACN) # 36 out 39 foragers are acorn users, 21 out of 39 farmers are acorn users
+table(oakacorn$GOT) # 36 out 79 have oak generic
+table(oakacorn$GAT) # 60 out of 71 have acorn generic
+table(oakacorn$GOT, oakacorn$AGR_ACN) # forager-users tend to have absent of oak generic
+table(oakacorn$GAT, oakacorn$AGR_ACN) # all (except for forager-nonuser) tend to have acorn generic
+summary(oakacorn$SOT)
+summary(oakacorn$SAT)
+sd(oakacorn$SOT, na.rm=TRUE)
+sd(oakacorn$SAT, na.rm=TRUE)
+# on average, acorn specifics tend to be lower compared to oak specifics
+oakacorn %>% group_by(AGR_ACN) %>%
+  summarise(mean_SOT = mean(SOT, na.rm=TRUE),
+            sd_SOT = sd(SOT, na.rm=TRUE),
+            mean_SAT = mean(SAT, na.rm=TRUE),
+            sd_SAT = sd(SAT, na.rm=TRUE)) %>% ungroup()
+# both farmers and forager-users have similar SOT number
+# forager-users tend to have higher SAT than farmers
+cor.test(oakacorn$n, oakacorn$H) # 0.85
+# n and H are strongly correlated, which is expected
+```
+
+Visualization through maps:
+
+```{r fig_maps, fig.width=14, fig.height=14}
+library(maps)
+
+world_map <- map_data("world")
+
+agr_acn_colors <- c(
+  "forager-nonuser" = "#2166ac",
+  "forager-user"    = "#74add1",
+  "farmer-nonuser"  = "#d73027",
+  "farmer-user"     = "#f46d43"
+)
+
+base_map <- list(
+  geom_map(data = world_map, map = world_map,
+           aes(long, lat, map_id = region),
+           fill = "#e0e0e0", color = "white", linewidth = 0.1),
+  coord_sf(xlim = c(-135, -60), ylim = c(8, 52)),
+  theme_void(),
+  theme(legend.position        = "none",
+        plot.title             = element_text(size = 10, hjust = 0.5, margin = margin(b = 4)))
+)
+
+color_scale  <- scale_color_manual(values = agr_acn_colors, name = "")
+
+# Shared color legend: invisible points so only the legend key renders
+legend_row <- ggplot(
+  tibble(AGR_ACN = factor(names(agr_acn_colors), levels = names(agr_acn_colors))),
+  aes(x = AGR_ACN, y = 1, color = AGR_ACN)
+) +
+  geom_point(size = 0, alpha = 0) +
+  labs(color = "") +
+  color_scale +
+  theme_void() +
+  theme(legend.position  = "top",
+        legend.direction = "horizontal",
+        legend.title     = element_text(size = 10, face = "bold"),
+        legend.text      = element_text(size = 9)) +
+  guides(color = guide_legend(override.aes = list(shape = 16, size = 3, alpha = 1)))
+
+# Small random jitter to reduce overlapping points (especially California)
+set.seed(42)
+oakacorn_jitter <- oakacorn %>%
+  mutate(
+    longitude = longitude + runif(n(), -2.5, 2.5),
+    latitude  = latitude  + runif(n(), 2, 2)
+  )
+
+# Map 1: Oak system — hollow = GOT absent, filled = GOT present; size = SOT
+p1 <- ggplot() +
+  base_map +
+  geom_point(
+    data = oakacorn_jitter %>% filter(!is.na(GOT), !is.na(SOT)),
+    aes(x = longitude, y = latitude,
+        color = AGR_ACN, size = SOT + 1, shape = GOT),
+    alpha = 0.8, stroke = 0.8
+  ) +
+  color_scale +
+  scale_shape_manual(values = c("absent" = 1, "present" = 16), name = "oak generic") +
+  scale_size_continuous(name = "# oak specifics", range = c(0.5, 2.5)) +
+  guides(color = "none",
+         shape = guide_legend(order = 1),
+         size  = guide_legend(order = 2)) +
+  ggtitle("Oak system")
+
+# Map 2: Acorn system — hollow = GAT absent, filled = GAT present; size = SAT
+p2 <- ggplot() +
+  base_map +
+  geom_point(
+    data = oakacorn_jitter %>% filter(!is.na(GAT), !is.na(SAT)),
+    aes(x = longitude, y = latitude,
+        color = AGR_ACN, size = SAT + 1, shape = GAT),
+    alpha = 0.8, stroke = 0.8
+  ) +
+  color_scale +
+  scale_shape_manual(values = c("absent" = 1, "present" = 16), name = "acorn generic") +
+  scale_size_continuous(name = "# acorn specifics", range = c(0.5, 2.5)) +
+  guides(color = "none",
+         shape = guide_legend(order = 1),
+         size  = guide_legend(order = 2)) +
+  ggtitle("Acorn system")
+
+# Map 3: Oak species richness — size = n
+p3 <- ggplot() +
+  base_map +
+  geom_point(
+    data = oakacorn_jitter %>% filter(!is.na(n)),
+    aes(x = longitude, y = latitude, color = AGR_ACN, size = n),
+    shape = 16, alpha = 0.8
+  ) +
+  color_scale +
+  scale_size_continuous(name = "# oak species", range = c(0.1, 2.5)) +
+  guides(color = "none",
+         size  = guide_legend(order = 1)) +
+  ggtitle("Oak species richness")
+
+# Map 4: Oak species Shannon diversity — size = H
+p4 <- ggplot() +
+  base_map +
+  geom_point(
+    data = oakacorn_jitter %>% filter(!is.na(H)),
+    aes(x = longitude, y = latitude, color = AGR_ACN, size = H),
+    shape = 16, alpha = 0.8
+  ) +
+  color_scale +
+  scale_size_continuous(name = "Shannon index", range = c(0.1, 2.5)) +
+  guides(color = "none",
+         size  = guide_legend(order = 1)) +
+  ggtitle("Oak species distribution")
+
+map_plot <- (p1 | p2) / (p3 | p4) / legend_row +
+  plot_layout(heights = c(1, 1, 0.01))
+
+ggsave(
+ here("output", "figures", "maps.pdf"),
+ plot   = map_plot,
+ width  = 5.5, height = 4, dpi = 300
+)
+
+detach("package:maps", unload = TRUE)
+```
+
+## Estimate Bayes Factors
+
+```{r estimate_bf, include=TRUE}
+
+run_bayes_analysis <- function(predictor, outcome, data) {
+
+  dstat <- data %>%
+    filter(!is.na(!!sym(predictor)), !is.na(!!sym(outcome)))
+
+  null_priors <- c(
+    prior(cauchy(0, 0.707), class = "Intercept"),
+    prior(cauchy(0, 0.707), class = "sd", lb = 0)
+  )
+
+  full_priors <- c(
+    prior(cauchy(0, 0.707), class = "b"),
+    prior(cauchy(0, 0.707), class = "Intercept"),
+    prior(cauchy(0, 0.707), class = "sd", lb = 0)
+  )
+
+  if (outcome %in% c("GOT", "GAT", "oak_system", "acorn_system")) {
+    family_type <- bernoulli(link = "logit")
+  } else if (outcome %in% c("SOT", "SAT") ) {
+    family_type <- poisson(link = "log")
+  }
+
+  null_warns <- character(0)
+  null_model <- withCallingHandlers(
+    brm(
+      formula = paste(outcome, "~ (1|family)"),
+      data = dstat,
+      family = family_type,
+      prior = null_priors,
+      save_pars = save_pars(all = TRUE),
+      iter = 10000,
+      control = list(adapt_delta = 0.95)
+    ),
+    warning = function(w) {
+      null_warns <<- c(null_warns, conditionMessage(w))
+      invokeRestart("muffleWarning")
+    }
+  )
+
+  full_warns <- character(0)
+  full_model <- withCallingHandlers(
+    brm(
+      formula = paste(outcome, "~", predictor, "+ (1|family)"),
+      data = dstat,
+      family = family_type,
+      prior = full_priors,
+      save_pars = save_pars(all = TRUE),
+      iter = 10000,
+      control = list(adapt_delta = 0.95)
+    ),
+    warning = function(w) {
+      full_warns <<- c(full_warns, conditionMessage(w))
+      invokeRestart("muffleWarning")
+    }
+  )
+
+  bridge_null <- bridge_sampler(null_model)
+  bridge_full <- bridge_sampler(full_model)
+
+  BF_value <- bf(bridge_full, bridge_null)
+
+  fe       <- fixef(full_model)
+  pred_row <- fe[grepl(predictor, rownames(fe), fixed = TRUE), , drop = FALSE]
+
+  summ <- tibble(
+    outcome       = outcome,
+    predictor     = predictor,
+    BF            = BF_value$bf,
+    estimate      = pred_row[1, "Estimate"],
+    ci_lo         = pred_row[1, "Q2.5"],
+    ci_hi         = pred_row[1, "Q97.5"],
+    warnings_null = paste(null_warns, collapse = " | "),
+    warnings_full = paste(full_warns, collapse = " | ")
+  )
+
+  return(summ)
+}
+
+# Factor levels
+oakacorn$GOT <- factor(oakacorn$GOT, levels = c("absent",   "present"))
+oakacorn$GAT <- factor(oakacorn$GAT, levels = c("absent",   "present"))
+oakacorn$AGR <- factor(oakacorn$AGR, levels = c("forager",  "farmer"))
+oakacorn$ACN <- factor(oakacorn$ACN, levels = c("non-user", "user"))
+
+# oak_system: binary (spec.only vs two.level)
+oakacorn_oak_sys <- oakacorn %>%
+  filter(!is.na(oak_system)) %>%
+  mutate(oak_system = factor(oak_system, levels = c("spec.only", "two.level")))
+
+# acorn_system: collapsed to binary (gen.only vs other)
+oakacorn_acorn_sys <- oakacorn %>%
+  filter(!is.na(acorn_system)) %>%
+  mutate(acorn_system = if_else(acorn_system == "gen.only", "gen.only", "other"),
+         acorn_system = factor(acorn_system, levels = c("other", "gen.only")))
+
+outcomes_data <- list(
+  list(outcome = "GOT",          data = oakacorn),
+  list(outcome = "SOT",          data = oakacorn),
+  list(outcome = "GAT",          data = oakacorn),
+  list(outcome = "SAT",          data = oakacorn),
+  list(outcome = "oak_system",   data = oakacorn_oak_sys),
+  list(outcome = "acorn_system", data = oakacorn_acorn_sys)
+)
+
+predictors <- c("AGR", "ACN", "n", "H")
+
+output_path <- here("output", "results", "bayes_factor.csv")
+
+completed <- if (file.exists(output_path)) {
+  read_csv(output_path, show_col_types = FALSE)
+} else {
+  tibble()
+}
+
+all_combos <- expand_grid(
+  seed    = 1:10,
+  od_idx  = seq_along(outcomes_data),
+  pred    = predictors
+) %>%
+  mutate(outcome = map_chr(od_idx, ~ outcomes_data[[.x]]$outcome))
+
+if (nrow(completed) > 0) {
+  all_combos <- all_combos %>%
+    anti_join(completed %>% select(outcome, predictor, seed),
+              by = c("outcome", "pred" = "predictor", "seed"))
+}
+
+cat(sprintf("Completed: %d  Remaining: %d\n",
+            nrow(expand_grid(seed=1:10, od_idx=seq_along(outcomes_data), pred=predictors)) - nrow(all_combos),
+            nrow(all_combos)))
+
+for (i in seq_len(nrow(all_combos))) {
+  row <- all_combos[i, ]
+  od  <- outcomes_data[[row$od_idx]]
+  cat(sprintf("[%d/%d] outcome=%s  predictor=%s  seed=%d\n",
+              i, nrow(all_combos), od$outcome, row$pred, row$seed))
+  set.seed(row$seed)
+  result <- tryCatch(
+    run_bayes_analysis(predictor = row$pred, outcome = od$outcome, data = od$data) %>%
+      mutate(seed = row$seed),
+    error = function(e) { cat(sprintf("  ERROR: %s\n", conditionMessage(e))); NULL }
+  )
+  if (!is.null(result)) {
+    write_csv(result, output_path, append = file.exists(output_path))
+  }
+}
+
+```
+
+Make table:
+
+```{r make table, include=TRUE}
+
+label_outcomes <- c(
+  "GOT"          = "oak generic",
+  "SOT"          = "# oak specifics",
+  "oak_system"   = "oak system",
+  "GAT"          = "acorn generic",
+  "SAT"          = "# acorn specifics",
+  "acorn_system" = "acorn system"
+)
+label_predictors <- c(
+  "AGR" = "subsistence",
+  "ACN" = "acorn use",
+  "n"   = "# species",
+  "H"   = "Shannon index"
+)
+
+bf_symbol <- function(bf) {
+  case_when(
+    bf > 100          ~ "xxx",
+    bf > 10           ~ "xx",
+    bf > 3.2          ~ "x",
+    bf >= 1 / 3.2     ~ "",
+    bf >= 1 / 10      ~ "o",
+    bf >= 1 / 100     ~ "oo",
+    TRUE              ~ "ooo"
+  )
+}
+
+raw <- read_csv(here("output", "results", "bayes_factor.csv"), show_col_types = FALSE)
+
+# average BF per outcome and predictor
+bf_avg <- raw %>%
+  group_by(outcome, predictor) %>%
+  summarise(avg_BF = mean(BF, na.rm = TRUE), .groups = "drop")
+
+# seed 9 is the only seed with no warnings for all 24 outcome-predictor combinations
+clean_coef <- raw %>%
+  filter(seed == 9) %>%
+  select(outcome, predictor, seed_used = seed, estimate, ci_lo, ci_hi)
+
+# sample size per outcome-predictor combination
+sample_sizes <- expand_grid(
+  outcome   = names(label_outcomes),
+  predictor = names(label_predictors)
+) %>%
+  mutate(N = map2_int(outcome, predictor, function(o, p) {
+    d <- if (o == "oak_system")   oakacorn %>% filter(!is.na(oak_system))
+         else if (o == "acorn_system") oakacorn %>% filter(!is.na(acorn_system))
+         else oakacorn
+    sum(!is.na(d[[o]]) & !is.na(d[[p]]))
+  }))
+
+# build table
+bayes_table <- bf_avg %>%
+  left_join(clean_coef,   by = c("outcome", "predictor")) %>%
+  left_join(sample_sizes, by = c("outcome", "predictor")) %>%
+  mutate(
+    symbol    = bf_symbol(avg_BF),
+    avg_BF    = round(avg_BF, 2),
+    estimate  = round(estimate, 2),
+    CI        = paste0("[", round(ci_lo, 2), ", ", round(ci_hi, 2), "]"),
+    outcome   = recode(outcome,   !!!label_outcomes),
+    predictor = recode(predictor, !!!label_predictors),
+    outcome   = factor(outcome,   levels = unname(label_outcomes)),
+    predictor = factor(predictor, levels = unname(label_predictors))
+  ) %>%
+  arrange(outcome, predictor) %>%
+  mutate(outcome = if_else(is.na(lag(outcome)) | outcome != lag(outcome),
+                           as.character(outcome), "")) %>%
+  select(outcome, predictor, N, avg_BF, symbol, estimate, CI)
+
+table_obj <- xtable(bayes_table, digits = c(0, 0, 0, 0, 2, 0, 2, 2))
+print(table_obj, file = here("output", "tables", "oak_acorn.tex"),
+      include.rownames = FALSE, sanitize.text.function = identity,
+      timestamp = NULL)
+
+# BF values across all seeds (seeds as columns)
+bf_seeds <- raw %>%
+  mutate(
+    outcome   = recode(outcome,   !!!label_outcomes),
+    predictor = recode(predictor, !!!label_predictors),
+    outcome   = factor(outcome,   levels = unname(label_outcomes)),
+    predictor = factor(predictor, levels = unname(label_predictors))
+  ) %>%
+  arrange(outcome, predictor, seed) %>%
+  select(outcome, predictor, seed, BF) %>%
+  pivot_wider(names_from = seed, values_from = BF, names_prefix = "seed_") %>%
+  mutate(outcome = if_else(is.na(lag(outcome)) | outcome != lag(outcome),
+                           as.character(outcome), ""))
+
+bf_seeds_obj <- xtable(bf_seeds, digits = c(0, 0, 0, rep(2, ncol(bf_seeds) - 2)))
+print(bf_seeds_obj, file = here("output", "tables", "bayes_factors.tex"),
+      include.rownames = FALSE, sanitize.text.function = identity,
+      timestamp = NULL)
+
+# named vector of BF symbols for figure annotations
+# GOT/GAT are stored as "GOT_bin"/"GAT_bin" in panel keys, so remap here
+bf_annot <- bf_avg %>%
+  mutate(
+    outcome_key = case_when(
+      outcome == "GOT" ~ "GOT_bin",
+      outcome == "GAT" ~ "GAT_bin",
+      TRUE             ~ outcome
+    ),
+    symbol = bf_symbol(avg_BF),
+    key    = paste0(outcome_key, "_", predictor)
+  ) %>%
+  { setNames(.$symbol, .$key) }
+
+```
+
+## Visualization
+
+Outcome is generic presence
+
+```{r fig1_domain_presence, include=TRUE}
+add_signif <- function(p, label, vjust = 1, side = "right") {
+  if (is.na(label) || nchar(label) == 0) return(p)
+  sz <- 3.5
+  if (side == "left") {
+    p + annotate("text", x = -Inf, y = Inf, label = label,
+                 hjust = -0.2, vjust = vjust, size = sz)
+  } else {
+    p + annotate("text", x = Inf, y = Inf, label = label,
+                 hjust = 1.2, vjust = vjust, size = sz)
+  }
+}
+
+oakacorn_plot <- oakacorn %>%
+  mutate(
+    oak_system   = factor(oak_system,   levels = c("gen.only","spec.only","two.level"), ordered = TRUE),
+    acorn_system = factor(acorn_system, levels = c("gen.only","spec.only","two.level"), ordered = TRUE),
+    GOT     = factor(GOT, levels = c("absent","present"), ordered = TRUE),
+    GAT     = factor(GAT, levels = c("absent","present"), ordered = TRUE),
+    AGR     = factor(AGR, levels = c("forager","farmer"),  ordered = TRUE),
+    ACN     = factor(ACN, levels = c("non-user","user"),   ordered = TRUE)
+  )
+
+# Bootstrap 95% CI for proportion of "present" in a group
+boot_prop_ci <- function(x, R = 1000, seed = 42) {
+  set.seed(seed)
+  x_bin <- as.integer(x == "present")
+  boots  <- replicate(R, mean(sample(x_bin, length(x_bin), replace = TRUE)))
+  data.frame(
+    n     = length(x_bin),
+    prop  = mean(x_bin),
+    ci_lo = unname(quantile(boots, 0.025)),
+    ci_hi = unname(quantile(boots, 0.975))
+  )
+}
+
+compute_bars <- function(df, group_var, outcome_var, R = 1000, seed = 42) {
+  df %>%
+    filter(!is.na(.data[[group_var]]), !is.na(.data[[outcome_var]])) %>%
+    group_by(group = .data[[group_var]]) %>%
+    group_modify(~ boot_prop_ci(.x[[outcome_var]], R = R, seed = seed)) %>%
+    ungroup()
+}
+
+presence_colors <- c("present" = "#67a9cf", "absent" = "#ef8a62")
+group_colors    <- c(
+  "forager"  = "#9ecae1", "farmer"   = "#2171b5",
+  "non-user" = "#9ecae1", "user"     = "#2171b5"
+)
+
+make_bar_panel <- function(df, group_var, outcome_var, x_label, y_label) {
+  bars <- compute_bars(df, group_var, outcome_var)
+
+  ggplot(bars, aes(x = group, y = prop, fill = group)) +
+    geom_col(alpha = 0.85, width = 0.5) +
+    geom_errorbar(aes(ymin = ci_lo, ymax = ci_hi),
+                  color = "#636363", width = 0.2, linewidth = 0.9) +
+    scale_fill_manual(values = group_colors) +
+    scale_y_continuous(limits = c(0, 1)) +
+    labs(x = x_label, y = y_label) +
+    theme_minimal(base_size = 11) +
+    theme(panel.grid = element_blank(), legend.position = "none", axis.text.x = element_text(size = 11))
+}
+
+make_density_panel <- function(df, x_var, outcome_var, x_label, y_label = "density") {
+  d <- df %>% filter(!is.na(.data[[x_var]]), !is.na(.data[[outcome_var]]))
+
+  ggplot(d, aes(x = .data[[x_var]], fill = .data[[outcome_var]])) +
+    geom_density(alpha = 0.4, linewidth = 0.8, color = NA) +
+    scale_fill_manual(values = presence_colors, name = "generic term",
+                      guide = guide_legend(override.aes = list(color = NA, linewidth = 0))) +
+    labs(x = x_label, y = y_label) +
+    theme_minimal(base_size = 11) +
+    theme(panel.grid = element_blank(),
+          legend.key  = element_rect(color = NA, fill = NA),
+          legend.title = element_text(size = 11),
+          legend.text  = element_text(size = 11))
+}
+
+p11 <- make_bar_panel(oakacorn_plot,     "AGR", "GOT", "subsistence",      "proportion of oak\n generic present") %>%
+  add_signif(bf_annot[["GOT_bin_AGR"]])
+p12 <- make_bar_panel(oakacorn_plot,     "ACN", "GOT", "acorn use",        "") %>%
+  add_signif(bf_annot[["GOT_bin_ACN"]])
+p13 <- (make_density_panel(oakacorn_plot, "n",   "GOT", "number of species") +
+  scale_fill_manual(values = presence_colors, name = NULL,
+                    guide = guide_legend(override.aes = list(color = NA, linewidth = 0)))) %>%
+  add_signif(bf_annot[["GOT_bin_n"]]) +
+  theme(legend.position = "top",
+        legend.text = element_text(size = 9), legend.key.size = unit(0.4, "cm"))
+p14 <- (make_density_panel(oakacorn_plot, "H",   "GOT", "Shannon index",    y_label = "") +
+  scale_fill_manual(values = presence_colors, name = NULL,
+                    guide = guide_legend(override.aes = list(color = NA, linewidth = 0)))) %>%
+  add_signif(bf_annot[["GOT_bin_H"]]) +
+  theme(legend.position = "top",
+        legend.text = element_text(size = 9), legend.key.size = unit(0.4, "cm"))
+p21 <- make_bar_panel(oakacorn_plot,     "AGR", "GAT", "subsistence",      "proportion of acorn\n generic present") %>%
+  add_signif(bf_annot[["GAT_bin_AGR"]])
+p22 <- make_bar_panel(oakacorn_plot,     "ACN", "GAT", "acorn use",        "") %>%
+  add_signif(bf_annot[["GAT_bin_ACN"]])
+p23 <- (make_density_panel(oakacorn_plot, "n",   "GAT", "number of species") +
+  scale_fill_manual(values = presence_colors, name = NULL,
+                    guide = guide_legend(override.aes = list(color = NA, linewidth = 0)))) %>%
+  add_signif(bf_annot[["GAT_bin_n"]]) +
+  theme(legend.position = "none")
+p24 <- make_density_panel(oakacorn_plot, "H",   "GAT", "Shannon index",    y_label = "") %>%
+  add_signif(bf_annot[["GAT_bin_H"]]) +
+  theme(legend.position = "none")
+
+density_block <- (p13 | p14) / (p23 | p24)
+
+bar_block <- (p11 | p12) / (p21 | p22)
+
+fig1 <- bar_block | density_block
+
+ggsave(
+  here("output", "figures", "case_presence.pdf"),
+  plot   = fig1,
+  width  = 9, height = 4, dpi = 300
+)
+```
+
+Outcome is number of specifics
+
+```{r fig2_domain_specifics, include=TRUE}
+
+compute_mean_bars <- function(df, group_var, outcome_var, n_boot = 1000, seed = 42) {
+  set.seed(seed)
+  df %>%
+    filter(!is.na(.data[[group_var]]), !is.na(.data[[outcome_var]])) %>%
+    group_by(group = .data[[group_var]]) %>%
+    summarise(
+      n     = n(),
+      mean  = mean(.data[[outcome_var]]),
+      ci_lo = {
+        x <- .data[[outcome_var]]
+        boot_means <- replicate(n_boot, mean(sample(x, length(x), replace = TRUE)))
+        quantile(boot_means, 0.025)
+      },
+      ci_hi = {
+        x <- .data[[outcome_var]]
+        boot_means <- replicate(n_boot, mean(sample(x, length(x), replace = TRUE)))
+        quantile(boot_means, 0.975)
+      },
+      .groups = "drop"
+    )
+}
+
+make_mean_bar_panel <- function(df, group_var, outcome_var, x_label, y_label) {
+  bars <- compute_mean_bars(df, group_var, outcome_var)
+
+  ggplot(bars, aes(x = group, y = mean, fill = group)) +
+    geom_col(alpha = 0.85, width = 0.5) +
+    geom_errorbar(aes(ymin = ci_lo, ymax = ci_hi),
+                  color = "#636363", width = 0.2, linewidth = 0.9) +
+    scale_fill_manual(values = group_colors) +
+    labs(x = x_label, y = y_label) +
+    theme_minimal(base_size = 11) +
+    theme(panel.grid = element_blank(), legend.position = "none", axis.text.x = element_text(size = 11))
+}
+
+make_scatter_panel <- function(df, x_var, outcome_var, x_label, y_label, family = "lm") {
+  d <- df %>% filter(!is.na(.data[[x_var]]), !is.na(.data[[outcome_var]]))
+
+  smooth_layer <- if (family == "poisson") {
+    geom_smooth(method = "glm", method.args = list(family = poisson(link = "log")),
+                se = TRUE, color = "#2171b5", fill = "#9ecae1")
+  } else if (family == "nb") {
+    geom_smooth(method = MASS::glm.nb, se = TRUE, color = "#2171b5", fill = "#9ecae1")
+  } else {
+    geom_smooth(method = "lm", se = TRUE, color = "#2171b5", fill = "#9ecae1")
+  }
+
+  ggplot(d, aes(x = .data[[x_var]], y = .data[[outcome_var]])) +
+    geom_jitter(width = 0, height = 0.15, alpha = 0.5, size = 2, color = "#636363") +
+    smooth_layer +
+    labs(x = x_label, y = y_label) +
+    theme_minimal(base_size = 11) +
+    theme(panel.grid = element_blank())
+}
+
+p11 <- make_mean_bar_panel(oakacorn_plot, "AGR", "SOT", "subsistence",       "# oak specifics") %>%
+  add_signif(bf_annot[["SOT_AGR"]])
+p12 <- make_mean_bar_panel(oakacorn_plot, "ACN", "SOT", "acorn use",         "") %>%
+  add_signif(bf_annot[["SOT_ACN"]])
+p13 <- make_scatter_panel(oakacorn_plot,  "n",   "SOT", "number of species", "", family = "poisson")  %>%
+  add_signif(bf_annot[["SOT_n"]], vjust = 0) +
+  coord_cartesian(clip = "off")
+p14 <- make_scatter_panel(oakacorn_plot,  "H",   "SOT", "Shannon index",     "", family = "poisson") %>%
+  add_signif(bf_annot[["SOT_H"]], vjust = 0) +
+  coord_cartesian(clip = "off")
+p21 <- make_mean_bar_panel(oakacorn_plot, "AGR", "SAT", "subsistence",       "# acorn specifics") %>%
+  add_signif(bf_annot[["SAT_AGR"]])
+p22 <- make_mean_bar_panel(oakacorn_plot, "ACN", "SAT", "acorn use",         "") %>%
+  add_signif(bf_annot[["SAT_ACN"]])
+p23 <- make_scatter_panel(oakacorn_plot,  "n",   "SAT", "number of species", "", family = "poisson") %>%
+  add_signif(bf_annot[["SAT_n"]])
+p24 <- make_scatter_panel(oakacorn_plot,  "H",   "SAT", "Shannon index",     "", family = "poisson") %>%
+  add_signif(bf_annot[["SAT_H"]])
+
+bar_block2    <- (p11 | p12) / (p21 | p22)
+scatter_block <- (p13 | p14) / (p23 | p24)
+
+fig2 <- bar_block2  | scatter_block
+
+ggsave(
+  here("output", "figures", "case_specifics.pdf"),
+  plot   = fig2,
+  width  = 9, height = 4, dpi = 300
+)
+```
+
+Outcome is system type
+
+```{r fig3_system_type, include=TRUE}
+
+system_colors <- c(
+  "gen.only"  = "#67a9cf",
+  "spec.only" = "#9970ab",
+  "two.level" = "#ef8a62",
+  "other"     = "#ef8a62"
+)
+
+make_system_pairwise_panel <- function(df, group_var, outcome_var, x_label, y_label) {
+  sys_levels   <- levels(droplevels(df[[outcome_var]][!is.na(df[[outcome_var]])]))
+  group_levels <- levels(df[[group_var]])
+
+  d <- df %>% filter(!is.na(.data[[group_var]]), !is.na(.data[[outcome_var]]))
+  bars <- expand_grid(sys_type = sys_levels, grp = group_levels) %>%
+    mutate(pmap_dfr(list(sys_type, grp), function(s, g) {
+      x     <- d[[outcome_var]][d[[group_var]] == g]
+      is_s  <- as.integer(x == s)
+      boots <- replicate(1000, mean(sample(is_s, length(is_s), replace = TRUE)))
+      tibble(prop = mean(is_s),
+             ci_lo = unname(quantile(boots, 0.025)),
+             ci_hi = unname(quantile(boots, 0.975)))
+    })) %>%
+    mutate(sys_type = factor(sys_type, levels = sys_levels),
+           grp      = factor(grp, levels = group_levels))
+
+  g_colors <- if (group_var == "AGR") {
+    c("forager" = "#9ecae1", "farmer" = "#2171b5")
+  } else {
+    c("non-user" = "#9ecae1", "user" = "#2171b5")
+  }
+
+  ggplot(bars, aes(x = sys_type, y = prop, fill = grp)) +
+    geom_col(position = position_dodge(0.7), alpha = 0.85, width = 0.65) +
+    geom_errorbar(aes(ymin = ci_lo, ymax = ci_hi),
+                  position = position_dodge(0.7), width = 0.2, linewidth = 0.7,
+                  color = "#333333") +
+    scale_fill_manual(values = g_colors, name = x_label) +
+    scale_y_continuous(labels = scales::percent_format(),
+                       limits = c(0, 1),
+                       expand = expansion(mult = c(0, 0.1))) +
+    labs(x = "system type", y = y_label) +
+    theme_minimal(base_size = 11) +
+    theme(panel.grid = element_blank(), legend.position = "top", legend.key.size = unit(0.4, "cm"),
+          legend.key  = element_rect(color = NA, fill = NA),
+          legend.title = element_blank(), legend.text  = element_text(size = 8))
+}
+
+make_system_density_panel <- function(df, x_var, outcome_var, x_label, y_label = "density") {
+  d <- df %>% filter(!is.na(.data[[x_var]]), !is.na(.data[[outcome_var]]))
+
+  ggplot(d, aes(x = .data[[x_var]], fill = .data[[outcome_var]])) +
+    geom_density(alpha = 0.35, linewidth = 0.8, color = NA) +
+    scale_fill_manual(values = system_colors, name = "system type",
+                      guide = guide_legend(override.aes = list(color = NA, linewidth = 0))) +
+    labs(x = x_label, y = y_label) +
+    theme_minimal(base_size = 11) +
+    theme(panel.grid = element_blank(), legend.position = c(0.85, 0.85),
+          legend.key  = element_rect(color = NA, fill = NA),
+          legend.title = element_blank(), legend.text  = element_text(size = 8),
+          legend.key.size = unit(0.4, "cm")
+)
+}
+
+oakacorn_plot_acorn <- oakacorn_plot %>%
+  mutate(acorn_system = factor(
+    if_else(acorn_system == "gen.only", "gen.only", "other"),
+    levels = c("gen.only", "other")
+  ))
+
+p11 <- make_system_pairwise_panel(oakacorn_plot, "AGR", "oak_system",   "subsistence", "proportion of\n oak system") %>%
+  add_signif(bf_annot[["oak_system_AGR"]])
+p12 <- make_system_pairwise_panel(oakacorn_plot, "ACN", "oak_system",   "acorn use",   "") %>%
+  add_signif(bf_annot[["oak_system_ACN"]])
+p13 <- make_system_density_panel(oakacorn_plot, "n",   "oak_system",   "number of species", "density") %>%
+  add_signif(bf_annot[["oak_system_n"]]) +
+  theme(legend.position = "top")
+p14 <- make_system_density_panel(oakacorn_plot, "H",   "oak_system",   "Shannon index",     "") %>%
+  add_signif(bf_annot[["oak_system_H"]]) +
+  theme(legend.position = "top")
+p21 <- make_system_pairwise_panel(oakacorn_plot_acorn, "AGR", "acorn_system", "subsistence", "proportion of\n acorn system") %>%
+  add_signif(bf_annot[["acorn_system_AGR"]])
+p22 <- make_system_pairwise_panel(oakacorn_plot_acorn, "ACN", "acorn_system", "acorn use",   "") %>%
+  add_signif(bf_annot[["acorn_system_ACN"]])
+p23 <- make_system_density_panel(oakacorn_plot_acorn, "n",   "acorn_system", "number of species", "density") %>%
+  add_signif(bf_annot[["acorn_system_n"]]) +
+  theme(legend.position = "top")
+p24 <- make_system_density_panel(oakacorn_plot_acorn, "H",   "acorn_system", "Shannon index",     "") %>%
+  add_signif(bf_annot[["acorn_system_H"]]) +
+  theme(legend.position = "top")
+
+fig3 <- (p11 | p12 | p13 | p14) / (p21 | p22 | p23 | p24)
+
+ggsave(
+  here("output", "figures", "case_system_type.pdf"),
+  plot   = fig3,
+  width  = 10, height = 4.5, dpi = 300
+)
+```
+
+Number of specifics by generic presence and system type
+
+```{r fig4_specifics_density, include=TRUE}
+
+# Row 1 panels emit legends; row 2 suppress to avoid duplicates
+p11 <- (make_density_panel(oakacorn_plot, "SOT", "GOT", "number of oak specifics", "density") +
+  scale_fill_manual(values = presence_colors, name = "oak generic",
+                    guide = guide_legend(override.aes = list(color = NA, linewidth = 0))) +
+  theme(legend.position = c(0.85, 0.72),
+          legend.title = element_text(size = 9), legend.text  = element_text(size = 9),
+          legend.key.size = unit(0.4, "cm")))
+
+p12 <- (make_system_density_panel(oakacorn_plot, "SOT", "oak_system", "number of oak specifics", "") +
+  guides(fill = guide_legend(title = "oak system", override.aes = list(color = NA, linewidth = 0))) +
+  theme(legend.position = c(0.85, 0.72),
+          legend.title = element_text(size = 9), legend.text  = element_text(size = 9),
+          legend.key.size = unit(0.4, "cm")))
+
+p21 <- (make_density_panel(oakacorn_plot, "SAT", "GAT", "number of acorn specifics", "density") +
+  scale_fill_manual(values = presence_colors, name = "acorn generic",
+                    guide = guide_legend(override.aes = list(color = NA, linewidth = 0))) +
+  theme(legend.position = c(0.85, 0.72),
+          legend.title = element_text(size = 9), legend.text  = element_text(size = 9),
+          legend.key.size = unit(0.4, "cm")))
+
+p22 <- (make_system_density_panel(oakacorn_plot, "SAT", "acorn_system", "number of acorn specifics", "") +
+  guides(fill = guide_legend(title = "acorn system", override.aes = list(color = NA, linewidth = 0))) +
+  theme(legend.position = c(0.85, 0.65),
+          legend.title = element_text(size = 9), legend.text  = element_text(size = 9),
+          legend.key.size = unit(0.4, "cm")))
+
+fig4 <- (p11 | p12) / (p21 | p22)
+fig4
+# ggsave(
+#   here("output", "figures", "case_generic_specifics.pdf"),
+#   plot   = fig4,
+#   width  = 6, height = 4, dpi = 300
+# )
+```
+
+## Permutation test
+
+```{r permutation_gat_got, include=TRUE}
+perm_data <- oakacorn %>%
+  filter(!is.na(GOT), !is.na(GAT)) %>%
+  distinct(glottocode, GOT, GAT) %>%
+  mutate(
+    got_present = as.integer(GOT == "present"),
+    gat_present = as.integer(GAT == "present")
+  )
+
+obs_diff <- mean(perm_data$gat_present) - mean(perm_data$got_present)
+
+set.seed(42)
+n_perm <- 10000
+perm_diffs <- replicate(n_perm, {
+  swapped   <- rbinom(nrow(perm_data), 1, 0.5)
+  gat_perm  <- ifelse(swapped, perm_data$got_present, perm_data$gat_present)
+  got_perm  <- ifelse(swapped, perm_data$gat_present, perm_data$got_present)
+  mean(gat_perm) - mean(got_perm)
+})
+
+# add-one correction (Phipson & Smyth 2010): avoids p = 0 when no permuted
+# value meets or exceeds the observed; lower bound is 1/(n_perm + 1)
+p_val <- (sum(perm_diffs >= obs_diff) + 1) / (n_perm + 1)
+print(p_val)
+```
+
+## Explore NAEB
+
+```{r naeb_mapping, include=TRUE}
+
+# assign parts of the tree that is used
+naeb_raw <- naeb_raw %>%
+  mutate(usage_part = case_when(
+    str_detect(tolower(notes), "acorn|\\bnuts?\\b|fruits?") ~ "acorn",
+    str_detect(tolower(notes), "bark")         ~ "bark",
+    str_detect(tolower(notes), "\\blogs?\\b")  ~ "log",
+    str_detect(tolower(notes), "branches?")    ~ "branch",
+    str_detect(tolower(notes), "plants?")      ~ "plant",
+    str_detect(tolower(notes), "wood")         ~ "wood",
+    str_detect(tolower(notes), "leaves|leaf")  ~ "leaves",
+    str_detect(tolower(notes), "young growth") ~ "young growth",
+    str_detect(tolower(notes), "gums?")        ~ "gum",
+    str_detect(tolower(notes), "roots?")       ~ "root",
+    str_detect(tolower(notes), "galls?")       ~ "gall",
+    str_detect(tolower(notes), "seeds?")       ~ "seed",
+    str_detect(tolower(notes), "twigs?")       ~ "twig",
+    str_detect(tolower(notes), "shoots?")      ~ "shoot",
+    str_detect(tolower(notes), "withes?")      ~ "withe",
+    str_detect(tolower(notes), "trunks?")      ~ "trunk",
+    str_detect(tolower(notes), "sticks?")      ~ "stick",
+    str_detect(tolower(notes), "pitch")        ~ "pitch",
+    str_detect(tolower(notes), "poles?")       ~ "pole",
+    str_detect(tolower(notes), "charcoal")     ~ "charcoal",
+    TRUE ~ "unspecified"
+  )) %>%
+  mutate(usage_part_binary = if_else(usage_part == "acorn", "acorn", "other"))
+
+length(unique(naeb_raw$culture)) # 93 has recorded use of oak
+table(naeb_raw$usage_part) # acorn is most commonly used (about half), bark is second most commonly used
+table(naeb_raw$use_category, naeb_raw$usage_part) # acorn is mostly used for food, bark is mostly used for drug
+check <- table(naeb_raw$use_subcategory, naeb_raw$usage_part)
+check_tbl <- as_tibble(as.data.frame(check)) # acorn is mostly used for porridge, bread, soup
+# bark is mostly used for skin, stomach and intestines, and throat
+# some notes appear different, they mean the same thing 
+
+acorn_usage <- naeb_raw %>%
+  filter(usage_part_binary == "acorn")
+
+acorn_mixing <- acorn_usage %>%
+  filter(use_category == "Food") %>%
+  group_by(culture, use_subcategory) %>%
+  summarise(
+    n_species   = n_distinct(scientific_name),
+    species     = paste(sort(unique(scientific_name)), collapse = ", "),
+    has_sp      = any(scientific_name == "Quercus sp."),
+    .groups     = "drop"
+  ) %>%
+  mutate(mixed = n_species > 1 | has_sp)
+# cultures seem to mix acorns from different species together to make various food
+```

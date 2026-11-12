@@ -1,0 +1,5 @@
+# macOS
+.DS_Store
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/

@@ -1,0 +1,81 @@
+﻿langname,GOT,SOT,BOT,GAT,SAT,AGR,ACN,glottocode,subarea
+Western Abenaki,absent,2,0,absent,2,agriculturalist,nonuser,west2630,Northeast
+Western Apache,present,3,0,present,0,agriculturalist,user,west2615,Southwest
+Natick,present,2,0,present,0,agriculturalist,user,wamp1249,Northeast
+Delaware,absent,4,0,present,0,agriculturalist,user,unam1242,Northeast
+Tzutujil,absent,3,0,present,0,agriculturalist,nonuser,tzut1248,Mesoamerica
+Tzotzil (San Andres),present,3,0,present,0,agriculturalist,nonuser,tzot1259,Mesoamerica
+Tzotzil (Zinacantan),absent,10,7,present,0,agriculturalist,nonuser,tzot1259,Mesoamerica
+Tzeltal (Tenejapa),present,5,5,absent,NA,agriculturalist,nonuser,tzel1254,Mesoamerica
+Tuscarora,absent,5,0,present,0,agriculturalist,user,tusc1257,Southeast
+Tunica,present,8,8,present,0,agriculturalist,user,tuni1252,Southeast
+Mixe (Totontepec),present,8,8,present,0,agriculturalist,nonuser,toto1305,Mesoamerica
+Papago-Pima,present,2,0,present,0,agriculturalist,user,toho1245,Southwest
+Mountain Pima,absent,5,0,present,0,agriculturalist,user,pima1248,Southwest
+Tequistlatec,absent,3,0,present,0,agriculturalist,nonuser,tequ1245,Mesoamerica
+Cuicatec,present,7,5,present,0,agriculturalist,nonuser,tepe1280,Mesoamerica
+Zapotec (Juarez),present,4,2,present,0,agriculturalist,nonuser,sier1250,Mesoamerica
+Seneca,absent,2,0,present,0,agriculturalist,user,sene1264,Northeast
+Huave,NA,3,1,NA,NA,agriculturalist,nonuser,sanm1287,Mesoamerica
+Tarascan,present,4,3,present,NA,agriculturalist,nonuser,pure1242,Mesoamerica
+Nevome,absent,5,0,present,2,agriculturalist,user,pima1248,Southwest
+Pawnee,absent,2,0,present,0,agriculturalist,user,pawn1254,Plains
+Ottawa,absent,4,1,absent,2,agriculturalist,user,otta1242,Northeast
+Osage,present,6,0,absent,2,agriculturalist,user,osag1243,Plains
+Onondaga,present,4,0,present,0,agriculturalist,user,onon1246,Northeast
+Ofo,present,3,3,present,0,agriculturalist,user,ofoo1242,Southeast
+Mohawk,absent,2,0,present,0,agriculturalist,user,moha1258,Northeast
+Zapotec (Mixtepec),absent,9,4,present,0,agriculturalist,NA,mixt1426,Mesoamerica
+Zapotec (Mitla),absent,6,4,present,NA,agriculturalist,nonuser,mitl1236,Mesoamerica
+Fox,present,3,0,NA,2,agriculturalist,user,mesk1242,Northeast
+Menominee,present,4,0,present,1,agriculturalist,user,meno1252,Northeast
+Maliseet,absent,2,0,absent,2,agriculturalist,NA,male1292,Northeast
+Koasati,absent,9,1,present,0,agriculturalist,user,koas1236,Southeast
+Kekchi,present,2,2,NA,0,agriculturalist,nonuser,kekc1242,Mesoamerica
+Ixcatec,present,6,4,NA,0,agriculturalist,nonuser,ixca1245,Mesoamerica
+Amuzgo,present,2,2,present,NA,agriculturalist,nonuser,ipal1235,Mesoamerica
+Huichol,absent,4,1,NA,NA,agriculturalist,nonuser,huic1243,Mesoamerica
+Mississaga,absent,2,0,absent,1,agriculturalist,user,east2542,Northeast
+Dakota,present,2,0,present,2,agriculturalist,user,dako1258,Plains
+Creek,present,10,5,present,1,agriculturalist,user,cree1270,Southeast
+Mixe (Coatlan),present,7,7,NA,NA,agriculturalist,nonuser,coat1238,Mesoamerica
+Choctaw,present,10,2,present,3,agriculturalist,user,choc1276,Southeast
+Ojibwa,present,3,0,present,0,agriculturalist,user,chip1241,Northeast
+Chickasaw,absent,4,0,present,1,agriculturalist,user,chic1270,Southeast
+Cherokee,absent,6,0,present,0,agriculturalist,user,cher1273,Southeast
+Tarahumara,present,7,0,present,0,agriculturalist,user,cent2131,Southwest
+Cakchiquel,present,3,0,present,0,agriculturalist,nonuser,kaqc1270,Mesoamerica
+Cabecar,absent,3,0,NA,NA,agriculturalist,nonuser,cabe1245,Lower central America
+Biloxi,present,7,5,present,1,agriculturalist,user,bilo1248,Southeast
+Atakapa,present,3,0,present,0,agriculturalist,user,atak1252,Southeast
+Tewa,present,2,1,present,0,agriculturalist,user,ariz1237,Southwest
+Algonquin,absent,2,0,absent,2,agriculturalist,user,algo1255,Northeast
+Alabama,present,4,0,present,0,agriculturalist,user,alab1237,Southeast
+Yuki,present,5,0,present,5,hunter-gatherer,user,yuki1243,California
+Yana,absent,8,0,present,6,hunter-gatherer,user,yana1271,California
+Wintu,present,5,0,present,5,hunter-gatherer,user,wint1259,California
+Wappo,absent,7,0,present,5,hunter-gatherer,user,wapp1239,California
+Tübatulabal,absent,6,0,present,6,hunter-gatherer,user,tuba1278,California
+Southern Sierra Miwok,absent,4,0,present,0,hunter-gatherer,user,sout2985,California
+Plains Miwok,absent,5,0,present,4,hunter-gatherer,user,plai1259,California
+Patwin,present,6,0,present,6,hunter-gatherer,user,patw1250,California
+Northern Sierra Miwok,absent,6,0,present,2,hunter-gatherer,user,nort2968,California
+Maidu,absent,3,2,present,0,hunter-gatherer,user,nort2951,California
+Nisenan,absent,6,0,present,NA,hunter-gatherer,user,nise1244,California
+Luiseno,absent,5,0,absent,1,hunter-gatherer,user,luis1253,California
+Lake Miwok,present,6,0,present,3,hunter-gatherer,user,lake1258,California
+Diegueno,absent,5,0,absent,5,hunter-gatherer,user,kumi1248,California
+Klamath,absent,2,0,absent,2,hunter-gatherer,nonuser,klam1254,Plateau
+Kiowa-Apache,present,3,3,NA,NA,hunter-gatherer,nonuser,kiow1264,Plains
+Kiowa,present,3,0,present,0,hunter-gatherer,user,kiow1266,Plains
+Kiliwa,absent,3,0,present,NA,hunter-gatherer,user,kili1268,Baja California
+Kawaiisu,absent,7,0,present,1,hunter-gatherer,user,kawa1283,California
+Karok,absent,3,0,present,3,hunter-gatherer,user,karo1304,California
+Cupeño,absent,4,0,absent,1,hunter-gatherer,user,cupe1243,California
+Comanche,present,2,0,present,0,hunter-gatherer,nonuser,coma1245,Plains
+Clallam,absent,2,0,NA,NA,hunter-gatherer,nonuser,clal1241,Northwest coast
+Chumash (Santa Inez),absent,4,0,present,1,hunter-gatherer,user,chum1264,California
+Chimariko,absent,3,0,present,1,hunter-gatherer,user,chim1301,California
+Central Sierra Miwok,absent,5,0,present,0,hunter-gatherer,user,cent2140,California
+Cahuilla,absent,4,0,present,3,hunter-gatherer,user,cahu1264,California
+Achumawi,absent,7,0,present,7,hunter-gatherer,user,achu1247,California
